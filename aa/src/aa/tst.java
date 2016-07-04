@@ -6,6 +6,7 @@ public class tst {
 		//test komentarzowy
 		// kom 2
 System.out.println("1234");
+System.out.println("HHHHH");
 	}
 
 }
