@@ -1,4 +1,4 @@
-package org.pfour.minmax.checkers;
+package minmax.checkers;
 
 public class TablePrinter {
 

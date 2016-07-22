@@ -1,4 +1,4 @@
-package org.pfour.minmax.checkers;
+package minmax.checkers;
 
 public enum Figure {
     BLACK_PIECE(true), BLACK_KING(true), WHITE_PIECE(true), WHITE_KING(true), UNPLAYABLE_FIELD(false);

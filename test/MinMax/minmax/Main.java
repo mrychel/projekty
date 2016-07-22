@@ -1,9 +1,6 @@
-package org.pfour.minmax;
+package minmax;
 
-import org.pfour.minmax.checkers.Figure;
-import org.pfour.minmax.checkers.Player;
-import org.pfour.minmax.checkers.Table;
-import org.pfour.minmax.checkers.TablePrinter;
+import minmax.checkers.*;
 
 public class Main {
 
