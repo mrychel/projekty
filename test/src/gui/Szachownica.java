@@ -7,18 +7,16 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Arrays;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.*;
-
 import gra.Plansza;
-import gra.Plansza.Pole;
 
-public class Szachownica implements ActionListener {
+// 22 sierpnia 2016
+public class Szachownica {
 
-	JFrame f;
+	private JFrame f;
+	private NoneSelectedButtonGroup btn;
 	private final JPanel gui = new JPanel(new BorderLayout(3, 3));
     public PoleSzachowe[][] chessBoardSquares = new PoleSzachowe[8][8];
     private Plansza plansza = new Plansza();
@@ -64,16 +62,18 @@ public class Szachownica implements ActionListener {
 
         chessBoard = new JPanel(new GridLayout(0, 9));
         chessBoard.setBorder(new LineBorder(Color.BLACK));
-        gui.add(chessBoard);
+        gui.add(chessBoard);        
         przerysuj();
         
     }       
     
     private void przerysuj() {
     	chessBoard.removeAll();
+    	btn = new NoneSelectedButtonGroup();
     	for (int x = 0; x < chessBoardSquares.length; x++) {
             for (int y = 0; y < chessBoardSquares[x].length; y++) {                
                 chessBoardSquares[x][y] = new PoleSzachowe(x, y);
+                btn.add(chessBoardSquares[x][y]);
             }
         }
         
@@ -84,11 +84,11 @@ public class Szachownica implements ActionListener {
                     SwingConstants.CENTER));
         }
         
-        for (int x = 0; x < 8; x++) {
-            for (int y = 0; y < 8; y++) {
-                switch (y) {
+        for (int y = 0; y < 8; y++) {
+            for (int x = 0; x < 8; x++) {
+                switch (x) {
                     case 0:
-                        chessBoard.add(new JLabel("" + (x + 1),
+                        chessBoard.add(new JLabel("" + (y + 1),
                                 SwingConstants.CENTER));
                     default:
                         chessBoard.add(chessBoardSquares[x][y]);
@@ -149,8 +149,7 @@ public class Szachownica implements ActionListener {
     
     public void ustawPionki(Plansza p) {        
     	this.plansza = p;
-    	przerysuj();
-    	
+    	przerysuj();    	
     }
     
     public void pobierzRuch() {
@@ -181,11 +180,6 @@ public class Szachownica implements ActionListener {
 		return new ImageIcon(im_nowy);
     }
     
-    public void mmm() {
-    	chessBoardSquares[3][3].getModel().setEnabled(true);
-    	gui.invalidate();
-    }
-    
     class PoleSzachowe extends JToggleButton {
     	
     	public int polozenieX, polozenieY;
@@ -199,89 +193,67 @@ public class Szachownica implements ActionListener {
     		ImageIcon icon = new ImageIcon(
                     new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB));
     		Boolean mm = plansza.dajPlansze()[polozenieX][polozenieY].dajPionek();
+    		this.setEnabled(false);
             if (mm != null)
-            	if (Boolean.TRUE.equals(mm))
+            	if (Boolean.TRUE.equals(mm)) {
             		this.setIcon(ikona_biala);
-            	else
+            		this.setSelectedIcon(ikona_biala);
+            		if (true) {
+            			this.setEnabled(true);           			
+            			
+            		}
+            	} else {
+            		this.setDisabledIcon(ikona_czarna);
             		this.setIcon(ikona_czarna);
+            	}
             else	
             	this.setIcon(icon);    		
     		
+            this.addItemListener(new ItemListener() {
+				
+				@Override
+				public void itemStateChanged(ItemEvent arg0) {
+					message.setText(Integer.toString(polozenieY));
+					/*
+					if (arg0.getStateChange() == ItemEvent.SELECTED) {
+					btn.clearSelection();	
+					((PoleSzachowe) arg0.getSource()).setSelected(true);
+					}*/
+						/*
+						for (int x = 0; x < chessBoardSquares.length; x++) 
+				            for (int y = 0; y < chessBoardSquares[x].length; y++)                 
+				                if (chessBoardSquares[x][y].isSelected())
+								chessBoardSquares[x][y].setSelected(false);
+				                
+					((PoleSzachowe) arg0.getSource()).setSelected(true); }*/
+					//((PoleSzachowe) arg0.getSource()).fi
+					//((PoleSzachowe) arg0.getSource()).se;
+					
+				}
+			});
+            
             if ((polozenieX % 2 == 1 && polozenieY % 2 == 1)                    
                  || (polozenieX % 2 == 0 && polozenieY % 2 == 0)) {
                 this.setBackground(Color.WHITE);
             } else {
                 this.setBackground(Color.BLACK);
-            }   		
-    		
-            //this.setEnabled(false);
-            //this.setDisabledIcon(ikona_szara);
-//    		this.setSelectedIcon(ikona_szara);	
-//    		this.setDisabledIcon(ikona_biala);
-//    		if (ikona_czarna != null && polozenieX==1 && polozenieY==1) {
-//            	this.setIcon(ikona_czarna);  
-//            	this.setEnabled(true);
-//            }
-    		this.addItemListener(new ListenerPola());
-    		this.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					if (arg0.getActionCommand()=="test") {
-						System.out.println("000000000000000000");
-						((JToggleButton) arg0.getSource()).getModel().setEnabled(true);
-						mmm();	
-						
-					}
-					
-				}
-			});
-    	}
-    	/*
-    	public void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            if (this.isEnabled())
-            this.setBackground(Color.BLUE);
-    	}*/
-    	
-    	public void setBialy() {
-    		ActionEvent act = new ActionEvent(this, 0, "test");
-    	
-    		for(ActionListener a: bc.getActionListeners()) {
-    		    a.actionPerformed(act);
-    		}
-    		//this.getModel().setEnabled(true);
-    		//this.setIcon(ikona_biala);
-    		//this.invalidate();
-    		//this.validate();
-    		//this.repaint();
-    		System.out.println("bialy");
-    	}
-    }
+            }   	    		
+    	}   
+    }    
     
-    class ListenerPola implements ItemListener {
-    	
-    	public ListenerPola() {
-    		super();
-    	}
-    	
-    	public void itemStateChanged(ItemEvent ev) {
-	        
-    		if(ev.getStateChange()==ItemEvent.SELECTED){
-	        	System.out.println("button is selected");
-	        } else if(ev.getStateChange()==ItemEvent.DESELECTED){
-	        	System.out.println("button is not selected");
-	        }
-	        
-	        ((PoleSzachowe) ev.getItem()).setEnabled(true);
-	        
-	        
-		}
-    }
+    public class NoneSelectedButtonGroup extends ButtonGroup {
 
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		
-		
-	}
+		  @Override
+		  public void setSelected(ButtonModel model, boolean selected) {
+
+		    if (selected) {
+
+		      super.setSelected(model, selected);
+
+		    } else {
+
+		      clearSelection();
+		    }
+		  }
+		}
 }
