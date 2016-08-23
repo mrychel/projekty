@@ -1,15 +1,7 @@
 package gra;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.StringTokenizer;
 
 import gra.Plansza.Pole;
-import mini_max.GeneratorRuchow;
-import mini_max.Lisc;
 import static gra.Stale.*;
-
 import java.awt.Point;
 import java.util.ArrayList;
 
@@ -18,18 +10,15 @@ public class Ruch {
 	// zwraca listê pól, dla danego gracza i danej planszy, majacych ruch
 	public static ArrayList<Point> dajRuchy(Boolean kto, Pole[][] plansza) {
 		ArrayList<Point> polaMajaceRuch = new ArrayList<Point>();
-		ArrayList<Point> p = new ArrayList<Point>();		
 		
 		// TO DO ----- if dajBicia(kto, plansza)
 		for (int x = 0; x < ROZMIAR_PLANSZY; x++) 
-            for (int y = 0; y < ROZMIAR_PLANSZY; y++) { 
-            	Boolean ff = plansza[x][y].dajPionek();
+            for (int y = 0; y < ROZMIAR_PLANSZY; y++)            	
 		    	if (kto.equals(plansza[x][y].dajPionek())) {
 		    		Point m = new Point(x, y);	
-		    		p=dajRuchy(kto, plansza, m);		    			    		
-		    		if (!p.isEmpty()) polaMajaceRuch.add(m);						
+		    		if (!dajRuchy(kto, plansza, m).isEmpty()) polaMajaceRuch.add(m);						
 		    	}
-		    }		
+		    
 		return polaMajaceRuch;
 	}
 	

@@ -5,17 +5,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Enumeration;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import gra.Plansza;
-import gra.Plansza.Pole;
 import gra.Ruch;
 import static gra.Stale.*;
 
@@ -34,13 +30,17 @@ public class Szachownica {
     protected PoleSzachowe[][] chessBoardSquares = new PoleSzachowe[ROZMIAR_PLANSZY][ROZMIAR_PLANSZY];
     protected ImageIcon ikona_czarna, ikona_biala, ikona_szara, ikona_pusta;   
         
-    public Szachownica() {    	
-        initializeGui();        
+    private Szachownica() {    	
+    	initializeGui();      
     }
 
     public static void main(String[]args) throws IOException
 	{
-		Szachownica szachownica = new Szachownica();
+    	SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+            	new Szachownica();  
+            }
+        });
 	}
     
     private final void initializeGui() {
@@ -98,7 +98,7 @@ public class Szachownica {
                     new JLabel(COLS.substring(x, x + 1),
                     SwingConstants.CENTER));
         }
-        // dodanie cyfr oznaczajacych pola szachownicy i pol 
+        // dodanie cyfr oznaczajacych pola szachownicy i pionkow 
     	for (int y = 0; y < 8; y++) {
     		for (int x = 0; x < 8; x++) { 
         		switch (x) {

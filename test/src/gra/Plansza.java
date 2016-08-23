@@ -1,6 +1,5 @@
 package gra;
 
-import java.util.Arrays;
 import static gra.Stale.*;
 
 // przechowuje stan planszy (gry)
