@@ -38,9 +38,9 @@ public class Plansza {
 	}
 	
 	public void wypiszPlansze() {
-		for (int x = 0; x < ROZMIAR_PLANSZY; x++) {
+		for (int y = 0; y < ROZMIAR_PLANSZY; y++) {
             System.out.println();
-			for (int y = 0; y < ROZMIAR_PLANSZY; y++) 
+			for (int x = 0; x < ROZMIAR_PLANSZY; x++) 
             	System.out.print(plansza[x][y].dajPionek()+" ");
 		}     
 		

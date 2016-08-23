@@ -5,13 +5,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import gra.Plansza;
+import gra.Plansza.Pole;
 import gra.Ruch;
-
 import static gra.Stale.*;
 
 
@@ -27,7 +32,7 @@ public class Szachownica {
     private final String strPlanszaGotowa = "Plansza gotowa do gry!";
     private static final String COLS = "ABCDEFGH";
     protected PoleSzachowe[][] chessBoardSquares = new PoleSzachowe[ROZMIAR_PLANSZY][ROZMIAR_PLANSZY];
-    protected ImageIcon ikona_czarna, ikona_biala, ikona_szara;   
+    protected ImageIcon ikona_czarna, ikona_biala, ikona_szara, ikona_pusta;   
         
     public Szachownica() {    	
         initializeGui();        
@@ -50,12 +55,7 @@ public class Szachownica {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				plansza.rozstawPionki(); 
-				plansza.wypiszPlansze();
-				Point m = new Point();
-				m = Ruch.dajRuchPrawo(GRACZ, plansza.dajPlansze(), new Point(0,5));
-				System.out.print(plansza.dajPlansze()[0][5].dajPionek());
-				if (m!= null) System.out.println(m.x+" "+m.y);
+				plansza.rozstawPionki(); 				
 				przerysuj();	
 				message.setText(strPlanszaGotowa);				
 			}
@@ -91,23 +91,22 @@ public class Szachownica {
                 btn.add(chessBoardSquares[x][y]);
             }
         }
-        // dodanie liter oznaczajacych pola szachownicy
-        chessBoard.add(new JLabel(""));
+        // dodanie liter oznaczajacych pola szachownicy        
+    	chessBoard.add(new JLabel(""));
         for (int x = 0; x < 8; x++) {
             chessBoard.add(
                     new JLabel(COLS.substring(x, x + 1),
                     SwingConstants.CENTER));
         }
-        // dodanie cyfr oznaczajacych pola szachownicy i pol
-        
-        for (int x = 0; x < 9; x++) {
-        	for (int y = 0; y < 8; y++) {
-	            switch (x) {
+        // dodanie cyfr oznaczajacych pola szachownicy i pol 
+    	for (int y = 0; y < 8; y++) {
+    		for (int x = 0; x < 8; x++) { 
+        		switch (x) {
 	                case 0:
 	                    chessBoard.add(new JLabel("" + (y + 1),
-	                            SwingConstants.CENTER));
+	                            SwingConstants.CENTER));	                    
 	                default:
-	                    chessBoard.add(chessBoardSquares[x][y]);
+	                	chessBoard.add(chessBoardSquares[x][y]);
 	            }
             }
         }
@@ -120,18 +119,24 @@ public class Szachownica {
 		ikona_czarna = pobierzIkone("czarny.png");
 		ikona_biala = pobierzIkone("bialy.png");		
 		ikona_szara = pobierzIkone("zolty.png");
+		ikona_pusta = pobierzIkone("");
     }
     
     private ImageIcon pobierzIkone(String plikIkony) {
     	
-    	BufferedImage im_nowy = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB); 		
-		BufferedImage im_stary;
-		try {
-			im_stary = ImageIO.read((getClass().getResource(plikIkony)));
-		} catch (IOException e) {
-			im_stary = im_nowy;
-			e.printStackTrace();
-		}
+    	BufferedImage im_nowy = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
+    	BufferedImage im_stary;
+    	
+    	if (!plikIkony.isEmpty()) {			
+			try {
+				im_stary = ImageIO.read((getClass().getResource(plikIkony)));
+			} catch (IOException e) {
+				im_stary = im_nowy;
+				e.printStackTrace();
+			}
+    	} else 
+    		im_stary = im_nowy;
+    	
 		Graphics2D g = im_nowy.createGraphics();
 		g.drawImage(im_stary, 0, 0, 64, 64, null);
 		g.dispose();
@@ -149,45 +154,47 @@ public class Szachownica {
     		polozenieX = x;
     		polozenieY = y;
     		setMargin(new Insets(0,0,0,0));  
-    		setEnabled(false);
-    		ImageIcon icon = new ImageIcon(
-                    new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB));
-    		setIcon(icon);
+    		setEnabled(false);    		
+    		setIcon(ikona_pusta);
     		// ustawienia pola planszy
     		if ((polozenieX % 2 == 1 && polozenieY % 2 == 1)                    
                  || (polozenieX % 2 == 0 && polozenieY % 2 == 0)) {
-                this.setBackground(Color.WHITE);
+                setBackground(Color.WHITE);
             } else {
-                this.setBackground(Color.BLACK);
+                setBackground(Color.BLACK);                
             }   
     		// ustawienie pionkow
-    		Boolean pionek = plansza.dajPlansze()[polozenieX][polozenieY].dajPionek();    		
-           
+    		Boolean pionek = plansza.dajPlansze()[polozenieX][polozenieY].dajPionek();
+    		
         	if (GRACZ.equals(pionek)) {
         		setIcon(ikona_biala);
-        		setSelectedIcon(ikona_biala);        		
-    			setEnabled(true); 
+        		setSelectedIcon(ikona_biala);    
+        		setDisabledIcon(ikona_biala);
+        		setRolloverIcon(ikona_szara);
+    			setEnabled(Ruch.dajRuchy(GRACZ, plansza.dajPlansze()).contains(new Point(polozenieX, polozenieY)));    			
         	} else if (KOMPUTER.equals(pionek)) {		
-        		setDisabledIcon(ikona_czarna);
-        		setIcon(ikona_czarna);            		
+        		setDisabledIcon(ikona_czarna);        		
         	}
             // dodanie logiki wykonywania ruchow
-            addActionListener(new RuchGracza());  
-    	}   
-    }    
+            addActionListener(new RuchGracza());          
+    	}
+	}    
     
     private class RuchGracza implements ActionListener {
 
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			int px = ((PoleSzachowe) arg0.getSource()).polozenieX;
-			int py = ((PoleSzachowe) arg0.getSource()).polozenieY;
-			System.out.println(px+" "+py);
-			chessBoardSquares[px-1][py-1].setRolloverEnabled(true);  		
-		      chessBoardSquares[px-1][py-1].setRolloverIcon(ikona_szara);
-			chessBoardSquares[px-1][py-1].setEnabled(true);			
-		}
-    	
+		public void actionPerformed(ActionEvent e) {
+				
+			if (((PoleSzachowe)e.getSource()).isSelected()) {
+				int px = ((PoleSzachowe) e.getSource()).polozenieX;
+				int py = ((PoleSzachowe) e.getSource()).polozenieY;				
+				for (Point k : Ruch.dajRuchy(GRACZ, plansza.dajPlansze(), new Point(px,py))) {					
+					chessBoardSquares[k.x][k.y].setRolloverEnabled(true); 
+					chessBoardSquares[k.x][k.y].setRolloverIcon(ikona_szara);
+				    chessBoardSquares[k.x][k.y].setEnabled(true);
+				}		
+			} 
+		}    	
     } 
     
     // podklasa techniczna potrzebna, zeby przy ruchu bylo zaznaczane tylko jedno pole
@@ -197,9 +204,18 @@ public class Szachownica {
 		public void setSelected(ButtonModel model, boolean selected) {
 
 		    if (selected) {              
-		        super.setSelected(model, selected);		     
+		        super.setSelected(model, selected);		       
 		    } else {		    	
-		        clearSelection();
+		    	Enumeration<AbstractButton> pola = getElements();
+		    	while (pola.hasMoreElements()) {
+		    		PoleSzachowe pole = (PoleSzachowe)pola.nextElement();
+		    		if (pole.isRolloverEnabled() && pole.getSelectedIcon() != ikona_biala) {
+			    		pole.setRolloverEnabled(false);	
+			    		pole.setRolloverIcon(ikona_pusta);
+			    		pole.setEnabled(false);
+		    		}
+		    	}
+		    	clearSelection();
 		    }
 		}
 	}

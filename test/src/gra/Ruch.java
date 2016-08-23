@@ -8,7 +8,6 @@ import java.util.StringTokenizer;
 import gra.Plansza.Pole;
 import mini_max.GeneratorRuchow;
 import mini_max.Lisc;
-
 import static gra.Stale.*;
 
 import java.awt.Point;
@@ -19,17 +18,18 @@ public class Ruch {
 	// zwraca listê pól, dla danego gracza i danej planszy, majacych ruch
 	public static ArrayList<Point> dajRuchy(Boolean kto, Pole[][] plansza) {
 		ArrayList<Point> polaMajaceRuch = new ArrayList<Point>();
-		Point p = new Point();
+		ArrayList<Point> p = new ArrayList<Point>();		
 		
 		// TO DO ----- if dajBicia(kto, plansza)
 		for (int x = 0; x < ROZMIAR_PLANSZY; x++) 
-            for (int y = 0; y < ROZMIAR_PLANSZY; y++) {
-            	p.x = x;
-    			p.y = y;
-		    	if (kto.equals(plansza[x][y].dajPionek())
-		    		&& !dajRuchy(kto, plansza, p).isEmpty())
-						polaMajaceRuch.add(p);
-		    }
+            for (int y = 0; y < ROZMIAR_PLANSZY; y++) { 
+            	Boolean ff = plansza[x][y].dajPionek();
+		    	if (kto.equals(plansza[x][y].dajPionek())) {
+		    		Point m = new Point(x, y);	
+		    		p=dajRuchy(kto, plansza, m);		    			    		
+		    		if (!p.isEmpty()) polaMajaceRuch.add(m);						
+		    	}
+		    }		
 		return polaMajaceRuch;
 	}
 	
@@ -37,75 +37,31 @@ public class Ruch {
 	public static ArrayList<Point> dajRuchy(Boolean kto, Pole[][] plansza, Point p) {
 		ArrayList<Point> polaGdzieMoznaRuszyc = new ArrayList<Point>();
 		polaGdzieMoznaRuszyc.add(dajRuchPrawo(kto, plansza, p));
+		polaGdzieMoznaRuszyc.add(dajRuchLewo(kto, plansza, p));
+		while (polaGdzieMoznaRuszyc.remove(null));	
 		return polaGdzieMoznaRuszyc;
 	}
 	
-	public static boolean mogeRuszyc(String ruch, String kto, Pole[][] plansza, int wiersz, int kolumna, boolean czyGracz) {
-		/*		
-		if(Stale.RUCH_LEWO.equals(ruch))
-		{
-			return mogeRuszycLewo(kto, plansza, wiersz, kolumna,  czyGracz);
-		}
-		else if(Stale.RUCH_PRAWO.equals(ruch))
-		{
-			return mogeRuszycPrawo(kto, plansza, wiersz, kolumna, czyGracz);
-		}
-		else
-		{
-			return false;
-		}*/return true;
-	}
-
 	public static Point dajRuchPrawo(Boolean kto, Pole[][] plansza, Point p) {
-			
-		int docelowyWiersz;	// przesuniecie w wierszu i kolumnie,		
-		int docelowaKolumna; // ¿eby ka¿dy gracz móg³ widzieæ planszê "z przodu"
+	
+		int docelowaKolumna = GRACZ.equals(kto) ? p.x+1 : p.x-1;
+		int docelowyWiersz = GRACZ.equals(kto) ? p.y-1 : p.y+1; 
 		
-		docelowaKolumna = GRACZ.equals(kto) ? p.x+1 : p.x-1;
-		docelowyWiersz = GRACZ.equals(kto) ? p.y-1 : p.y+1; 
+		return (czyNaPlanszy(docelowaKolumna, docelowyWiersz)
+				&& plansza[docelowaKolumna][docelowyWiersz].dajPionek() == null) ? 
+				new Point(docelowaKolumna, docelowyWiersz) : null;		
+	}
+	
+	public static Point dajRuchLewo(Boolean kto, Pole[][] plansza, Point p) {	
 		
-		return (czyNaPlanszy((docelowyWiersz), (docelowaKolumna))
-				&& plansza[docelowyWiersz][docelowaKolumna].dajPionek() == null) ? 
-				new Point(docelowyWiersz, docelowaKolumna) : null;		
+		int docelowaKolumna = GRACZ.equals(kto) ? p.x-1 : p.x+1;
+		int docelowyWiersz = GRACZ.equals(kto) ? p.y-1 : p.y+1; 
+		
+		return (czyNaPlanszy(docelowaKolumna, docelowyWiersz)
+				&& plansza[docelowaKolumna][docelowyWiersz].dajPionek() == null) ? 
+				new Point(docelowaKolumna, docelowyWiersz) : null;	
 	}
 	/*
-	public static boolean mogeRuszycLewo(String kto, Pole[][] plansza, int pionekWiersz, int pionekKolumna, boolean czyGracz) {
-	
-		boolean moge;
-		int skokWiersz;	// przesuniecie w wierszu i kolumnie,		
-		int skokKolumna; // ¿eby ka¿dy gracz móg³ widzieæ planszê "z przodu"
-	
-		skokKolumna = -1;
-		if (Stale.GRACZ.equals(kto)) 
-			skokWiersz = -1; 
-		else
-			skokWiersz = 1;
-		
-		if(pionekKolumna == 1) {
-			
-			if(czyGracz) System.out.println("Nie mo¿na wykonaæ tego ruchu "+
-											plansza[pionekWiersz][pionekKolumna].dajPionek()+
-											", jestes na koncu planszy.");
-			moge = false; 
-		} else {
-			
-			if(czyNaPlanszy((pionekWiersz+skokWiersz), (pionekKolumna+skokKolumna))
-					   && plansza[pionekWiersz+skokWiersz][pionekKolumna+skokKolumna]!= null
-					   && Stale.POLE_PUSTE.equals(plansza[pionekWiersz+skokWiersz][pionekKolumna+skokKolumna].dajPionek()))	{
-						
-			   moge = true;
-			} else {
-				if (czyGracz && !Stale.POLE_PUSTE.equals(plansza[pionekWiersz+skokWiersz][pionekKolumna+skokKolumna].dajPionek())) 
-					System.out.println("Lewe pole pionka "+
-										plansza[pionekWiersz][pionekKolumna].dajPionek()+
-										", jest zajête.");
-				moge = false;
-			}
-		}
-		
-		return moge;
-	}
-
 	public static Pole[][]  move(String ruch, String kto, Pole[][] plansza, int pionekWiersz, int pionekKolumna) {
 	
 		if (Stale.RUCH_LEWO.equals(ruch))
@@ -248,9 +204,9 @@ public class Ruch {
 		}			
 	}
 */
-	public static boolean czyNaPlanszy(int wiersz, int kolumna) {
+	public static boolean czyNaPlanszy(int kolumna, int wiersz) {
 		
-		return wiersz<=Stale.ROZMIAR_PLANSZY  && kolumna <=Stale.ROZMIAR_PLANSZY 
-				&& wiersz>=0 && kolumna>=0;
+		return wiersz < ROZMIAR_PLANSZY  && kolumna < ROZMIAR_PLANSZY 
+				&& wiersz >= 0 && kolumna >= 0;
 	}
 }
