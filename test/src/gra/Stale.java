@@ -1,11 +1,15 @@
 package gra;
 
-public class Stale {
+public final class Stale {
 	
+	
+	public final static Boolean GRACZ = true;
+	public final static Boolean KOMPUTER = false;
+	public static final int ROZMIAR_PLANSZY = 8;	
 	public static final int GLEBOKOSC_DRZEWA = 2;
-	public static final int ROZMIAR_PLANSZY = 8;
-	public static final String GRACZ = "gracz";
-	public static final String KOMPUTER = "komputer";
+	
+	public static final String GRACZ_1 = "gracz";
+	public static final String KOMPUTER_1 = "komputer";
 	public static final String RUCH = "ruch";
 	public static final String RUCH_PRAWO = "prawo";
 	public static final String RUCH_LEWO = "lewo";

@@ -1,12 +1,38 @@
 package gra;
 import gra.Ruch;
-import gra.Pole;
+import gra.Plansza.Pole;
 
-import java.util.Arrays;
+import static gra.Stale.ROZMIAR_PLANSZY;
+
+import java.awt.Point;
+import java.util.ArrayList;
 
 
 public class Bicie {
 	
+	// zwraca listê pól, dla danego gracza i danej planszy, majacych bicie
+	public static ArrayList<Point> dajPolaMajaceBicie(Boolean kto, Pole[][] plansza) {
+		ArrayList<Point> polaMajaceBicie = new ArrayList<Point>();
+		Point p = new Point();
+		
+		for (int x = 0; x < ROZMIAR_PLANSZY; x++) 
+            for (int y = 0; y < ROZMIAR_PLANSZY; y++) {            	
+            	p.x = x;
+            	p.y = y;
+            	if (kto.equals(plansza[x][y].dajPionek())
+            		&& !dajBicia(kto, plansza, p).isEmpty())
+						polaMajaceBicie.add(p);
+            }
+		return polaMajaceBicie;
+	}
+	
+	// zwraca listê pól, dla danego gracza i planszy oraz pola, na które mo¿e byæ wykonane bicie (max. dwa pola, w lewo lub w prawo)
+	public static ArrayList<Point> dajBicia(Boolean kto, Pole[][] plansza, Point p) {
+		ArrayList<Point> polaGdzieMoznaBic = new ArrayList<Point>();
+		
+		return null;
+	}
+	/*
 	public static boolean mogeBic(String ruch, String kto, Pole[][] plansza, int wiersz, int kolumna, boolean czyGracz) {
 		
 		if (Stale.BICIE_LEWO.equals(ruch)) {
@@ -22,7 +48,7 @@ public class Bicie {
 		return false;
 	}
 
-	public static boolean mogeBicLewo(String kto, Pole[][] plansza, int wiersz, int kolumna, boolean czyGracz) {
+	public static Point mogeBicLewo(String kto, Pole[][] plansza, int wiersz, int kolumna, boolean czyGracz) {
 		
 		String[] pionki = new String[12];
 		int skokWiersz;	
@@ -49,10 +75,10 @@ public class Bicie {
 				
 		if(jestPokonany && bezpiecznaPrzestrzen)
 		   		    
-			return true;
+			return null;
 		else
 		
-			return false;
+			return null;
 	}
 
 	public static boolean mogeBicPrawo(String kto, Pole[][] plansza, int wiersz, int kolumna, boolean czyGracz) {
@@ -147,5 +173,5 @@ public class Bicie {
 					plansza[0][Stale.GRACZ.equals(kto)?1:2].dajWartosc()+1); 
 		} 
 		return plansza;
-	}
+	}*/
 }

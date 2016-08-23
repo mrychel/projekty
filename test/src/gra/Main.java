@@ -10,17 +10,17 @@ public class Main {
 	
 	public static void main(String[]args) throws IOException
 	{
-		startGry();		
+		Szachownica szachownica = new Szachownica();
 	}
 	
 	public static void startGry() throws IOException
 	{
-		Szachownica szachownica = new Szachownica();		    
-		//SwingUtilities.invokeLater(szachownica.pobierzSzachownice());
-		szachownica.s();
-		Plansza aPlansza = new Plansza();		
+				    
+		//SwingUtilities.invokeLater(szachownica);
+		//szachownica.s();
+		//Plansza aPlansza = new Plansza();		
 //		
-		szachownica.ustawPionki(aPlansza);
+		//szachownica.ustawPionki(aPlansza);
 		
 //		aPlansza.pokazPlansze();
 //		while(true)  // to na Runnable??????????????????????
@@ -40,6 +40,7 @@ public class Main {
 	
 	public static void koniecGry(String wygrany)
 	{
+		/*
 		if (Stale.GRACZ.equals(wygrany))
 		{
 			System.out.println("Wygra³eœ :D");
@@ -49,6 +50,6 @@ public class Main {
 		{
 			System.out.println("Przegra³eœ :(");
 			System.exit(0);
-		} 
+		} */
 	}
 }

@@ -1,15 +1,20 @@
 package gra;
 
 import java.util.Arrays;
+import static gra.Stale.*;
 
+// przechowuje stan planszy (gry)
 public class Plansza {                                                                                                            
 
-	private Pole[][] plansza = new Pole[8][8];  
+	private Pole[][] plansza = new Pole[ROZMIAR_PLANSZY][ROZMIAR_PLANSZY];  
 	private boolean bicie = false;                                                                                         
                                                                                                                                 
 	public Plansza()                                                                                                              
-	{                                                                                   
-		rozstawPionki();                                                                                    
+	{   
+		// null = puste pole
+		for (int x = 0; x < ROZMIAR_PLANSZY; x++) 
+            for (int y = 0; y < ROZMIAR_PLANSZY; y++) 
+            	plansza[x][y] = new Pole(0, null);	
 	}	                                                                                                                        
 	                                                                                                                            
 	public Pole[][] dajPlansze()                                                                                                  
@@ -32,21 +37,20 @@ public class Plansza {
 		return bicie;
 	}
 	
-	private char getFigureRepresentation(String figura) {
-       /*
-		if (figura == "") return UNPLAYABLE_FIELD;
-        if (Arrays.asList(Stale.BIALE).contains(figura)) return WHITE_PIECE;
-        if (Arrays.asList(Stale.CZARNE).contains(figura)) return BLACK_PIECE;
-        if (Stale.POLE_PUSTE.equals(figura)) return PLAYABLE_FIELD; 
-        return UNPLAYABLE_FIELD;*/
-		return 0;
-    }
+	public void wypiszPlansze() {
+		for (int x = 0; x < ROZMIAR_PLANSZY; x++) {
+            System.out.println();
+			for (int y = 0; y < ROZMIAR_PLANSZY; y++) 
+            	System.out.print(plansza[x][y].dajPionek()+" ");
+		}     
+		
+	}
 	
 	public void rozstawPionki() {
 		// null = puste pole
-		for (int x = 0; x < 8; x++) 
-            for (int y = 0; y < 8; y++) 
-            	plansza[x][y] = new Pole(0, null);		
+		for (int x = 0; x < ROZMIAR_PLANSZY; x++) 
+            for (int y = 0; y < ROZMIAR_PLANSZY; y++) 
+            	plansza[x][y].ustawPionek(null);	
 		
     	// true = biale
     	plansza[1][0].ustawPionek(false);
