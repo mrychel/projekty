@@ -1,17 +1,17 @@
 package gra;
-import gra.Ruch;
+
+import static gra.Ruch.*;
+import static gra.Stale.*;
 import gra.Plansza.Pole;
-
-import static gra.Stale.ROZMIAR_PLANSZY;
-
 import java.awt.Point;
+import java.io.PushbackInputStream;
 import java.util.ArrayList;
 
 
 public class Bicie {
 	
 	// zwraca listê pól, dla danego gracza i danej planszy, majacych bicie
-	public static ArrayList<Point> dajPolaMajaceBicie(Boolean kto, Pole[][] plansza) {
+	public static ArrayList<Point> dajBicia(Boolean kto, Pole[][] plansza) {
 		ArrayList<Point> polaMajaceBicie = new ArrayList<Point>();
 		Point p = new Point();
 		
@@ -24,97 +24,41 @@ public class Bicie {
 						polaMajaceBicie.add(p);
             }
 		return polaMajaceBicie;
-	}
+	}	
 	
-	// zwraca listê pól, dla danego gracza i planszy oraz pola, na które mo¿e byæ wykonane bicie (max. dwa pola, w lewo lub w prawo)
+	// zwraca listê pól, dla danego gracza i planszy, na które mo¿e byæ wykonane bicie (max. dwa pola, w lewo lub w prawo)
 	public static ArrayList<Point> dajBicia(Boolean kto, Pole[][] plansza, Point p) {
-		ArrayList<Point> polaGdzieMoznaBic = new ArrayList<Point>();
-		
-		return null;
+		ArrayList<Point> polaGdzieMoznaRuszyc = new ArrayList<Point>();
+		polaGdzieMoznaRuszyc.add(dajBiciePrawo(kto, plansza, p));
+		polaGdzieMoznaRuszyc.add(dajBicieLewo(kto, plansza, p));
+		while (polaGdzieMoznaRuszyc.remove(null));	
+		return polaGdzieMoznaRuszyc;
 	}
-	/*
-	public static boolean mogeBic(String ruch, String kto, Pole[][] plansza, int wiersz, int kolumna, boolean czyGracz) {
+
+	public static Point dajBiciePrawo(Boolean kto, Pole[][] plansza, Point p) {
 		
-		if (Stale.BICIE_LEWO.equals(ruch)) {
-				
-			System.out.println("Bicie na lewo");
-			return mogeBicLewo(kto, plansza, wiersz, kolumna, czyGracz);
-		} else if (Stale.BICIE_PRAWO.equals(ruch)) {
+		int docelowaKolumna = GRACZ.equals(kto) ? p.x+2 : p.x-2;
+		int docelowyWiersz = GRACZ.equals(kto) ? p.y-2 : p.y+2; 
+		
+		return (czyNaPlanszy(docelowaKolumna, docelowyWiersz)
+				&& plansza[docelowaKolumna][docelowyWiersz].dajPionek() == PUSTE_POLE
+				&& plansza[GRACZ.equals(kto) ? p.x+1 : p.x-1][GRACZ.equals(kto) ? p.y-1 : p.y+1].dajPionek() == GRACZ.equals(kto) ? KOMPUTER : GRACZ) ? 
+				new Point(docelowaKolumna, docelowyWiersz) : null;		
+	}
 	
-			System.out.println("Bicie na prawo");
-			return mogeBicPrawo(kto, plansza, wiersz, kolumna, czyGracz);
-		} 
+	public static Point dajBicieLewo(Boolean kto, Pole[][] plansza, Point p) {
 		
-		return false;
+		int docelowaKolumna = GRACZ.equals(kto) ? p.x-2 : p.x+2;
+		int docelowyWiersz = GRACZ.equals(kto) ? p.y-2 : p.y+2; 
+		
+		return (czyNaPlanszy(docelowaKolumna, docelowyWiersz)
+				&& plansza[docelowaKolumna][docelowyWiersz].dajPionek() == PUSTE_POLE
+				&& plansza[GRACZ.equals(kto) ? p.x-1 : p.x+1][GRACZ.equals(kto) ? p.y-1 : p.y+1].dajPionek() == GRACZ.equals(kto) ? KOMPUTER : GRACZ) ? 
+				new Point(docelowaKolumna, docelowyWiersz) : null;		
 	}
-
-	public static Point mogeBicLewo(String kto, Pole[][] plansza, int wiersz, int kolumna, boolean czyGracz) {
-		
-		String[] pionki = new String[12];
-		int skokWiersz;	
-		int skokKolumna = -1; 
-		
-		if (Stale.GRACZ.equals(kto)) { 
-			skokWiersz = -1; 
-			pionki = Stale.BIALE;
-		} else {
-			skokWiersz = 1;
-			pionki = Stale.CZARNE;
-		}
-				
-		boolean jestPokonany = false;
-		if(Ruch.czyNaPlanszy(wiersz+skokWiersz, kolumna+skokKolumna) 
-		   && plansza[wiersz+skokWiersz][kolumna+skokKolumna]!= null
-		   && Arrays.asList(pionki).contains(plansza[wiersz+skokWiersz][kolumna+skokKolumna].dajPionek()))
-		{
-			jestPokonany = true;
-		}
-				
-		boolean bezpiecznaPrzestrzen = Ruch.czyNaPlanszy(wiersz+(2*skokWiersz), kolumna+(2*skokKolumna))
-									   && Ruch.mogeRuszycLewo(kto, plansza, wiersz+skokWiersz, kolumna+skokKolumna, czyGracz);
-				
-		if(jestPokonany && bezpiecznaPrzestrzen)
-		   		    
-			return null;
-		else
-		
-			return null;
-	}
-
-	public static boolean mogeBicPrawo(String kto, Pole[][] plansza, int wiersz, int kolumna, boolean czyGracz) {
 	
-		String[] pionki = new String[12];
-		int skokWiersz;	
-		int skokKolumna = 1; 
-		
-		if (Stale.GRACZ.equals(kto)) { 
-			skokWiersz = -1; 
-			pionki = Stale.BIALE;
-		} else {
-			skokWiersz = 1;
-			pionki = Stale.CZARNE;	
-		}
-		
-		boolean jestPokonany = false;
-		if(Ruch.czyNaPlanszy(wiersz+skokWiersz, kolumna+skokKolumna) 
-				   && plansza[wiersz+skokWiersz][kolumna+skokKolumna]!= null
-				   && Arrays.asList(pionki).contains(plansza[wiersz+skokWiersz][kolumna+skokKolumna].dajPionek()))
-				{
-					jestPokonany = true;
-				}
-		
-		boolean bezpiecznaPrzestrzen = Ruch.czyNaPlanszy(wiersz+(2*skokWiersz), kolumna+(2*skokKolumna))
-				   && Ruch.mogeRuszycPrawo(kto, plansza, wiersz+skokWiersz, kolumna+skokKolumna, czyGracz);
-		
-		if(jestPokonany && bezpiecznaPrzestrzen)	   
-			
-			return true;
-		else
-		
-			return false;
-	}
 
-
+/*
 	public static void bicie(String ruch, String kto, Pole[][] plansza, int wiersz, int kolumna, boolean czyGracz) {
 		
 		if (Stale.BICIE_LEWO.equals(ruch))

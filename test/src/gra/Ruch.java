@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class Ruch {
  
-	// zwraca listê pól, dla danego gracza i danej planszy, majacych ruch
+	// zwraca listê pól, dla danego gracza i danej planszy, majacych ruch lub bicie
 	public static ArrayList<Point> dajRuchy(Boolean kto, Pole[][] plansza) {
 		ArrayList<Point> polaMajaceRuch = new ArrayList<Point>();
 		
@@ -22,7 +22,7 @@ public class Ruch {
 		return polaMajaceRuch;
 	}
 	
-	// zwraca listê pól, dla danego gracza i planszy oraz pola, na które mo¿e byæ wykonane bicie (max. dwa pola, w lewo lub w prawo)
+	// zwraca listê pól, dla danego gracza i planszy, na które mo¿e byæ wykonany ruch lub bicie
 	public static ArrayList<Point> dajRuchy(Boolean kto, Pole[][] plansza, Point p) {
 		ArrayList<Point> polaGdzieMoznaRuszyc = new ArrayList<Point>();
 		polaGdzieMoznaRuszyc.add(dajRuchPrawo(kto, plansza, p));
@@ -37,7 +37,7 @@ public class Ruch {
 		int docelowyWiersz = GRACZ.equals(kto) ? p.y-1 : p.y+1; 
 		
 		return (czyNaPlanszy(docelowaKolumna, docelowyWiersz)
-				&& plansza[docelowaKolumna][docelowyWiersz].dajPionek() == null) ? 
+				&& plansza[docelowaKolumna][docelowyWiersz].dajPionek() == PUSTE_POLE) ? 
 				new Point(docelowaKolumna, docelowyWiersz) : null;		
 	}
 	
@@ -47,7 +47,7 @@ public class Ruch {
 		int docelowyWiersz = GRACZ.equals(kto) ? p.y-1 : p.y+1; 
 		
 		return (czyNaPlanszy(docelowaKolumna, docelowyWiersz)
-				&& plansza[docelowaKolumna][docelowyWiersz].dajPionek() == null) ? 
+				&& plansza[docelowaKolumna][docelowyWiersz].dajPionek() == PUSTE_POLE) ? 
 				new Point(docelowaKolumna, docelowyWiersz) : null;	
 	}
 	
