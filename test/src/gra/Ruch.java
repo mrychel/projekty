@@ -50,21 +50,14 @@ public class Ruch {
 				&& plansza[docelowaKolumna][docelowyWiersz].dajPionek() == null) ? 
 				new Point(docelowaKolumna, docelowyWiersz) : null;	
 	}
-	/*
-	public static Pole[][]  move(String ruch, String kto, Pole[][] plansza, int pionekWiersz, int pionekKolumna) {
 	
-		if (Stale.RUCH_LEWO.equals(ruch))
-		{
-			System.out.println("Ruch w lewo!");
-			return ruchLewo(kto, plansza, pionekWiersz, pionekKolumna);	
-		}
-		else
-		{
-			System.out.println("Ruch w prawo!");
-			return ruchPrawo(kto, plansza, pionekWiersz, pionekKolumna);
-		}
+	public static void wykonajRuch(Pole[][] plansza, Point skad, Point dokad) {
+	
+		plansza[dokad.x][dokad.y].ustawPionek(
+			plansza[skad.x][skad.y].dajPionek());
+		plansza[skad.x][skad.y].ustawPionek(PUSTE_POLE);
 	}
-	
+	/*
 	public static Pole[][] ruchLewo(String kto, Pole[][] plansza, int pionekWiersz, int pionekKolumna) {
 		
 		int skokWiersz;	

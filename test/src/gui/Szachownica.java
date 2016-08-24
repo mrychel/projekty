@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.Enumeration;
 
@@ -12,7 +13,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 import gra.Plansza;
-import gra.Ruch;
+import static gra.Ruch.*;
 import static gra.Stale.*;
 
 
@@ -27,9 +28,10 @@ public class Szachownica {
     private final JLabel message = new JLabel();
     private final String strPlanszaGotowa = "Plansza gotowa do gry!";
     private static final String COLS = "ABCDEFGH";
+    protected static final Point PUSTY_PUNKT = new Point(-1,-1); 
     protected PoleSzachowe[][] chessBoardSquares = new PoleSzachowe[ROZMIAR_PLANSZY][ROZMIAR_PLANSZY];
-    protected ImageIcon ikona_czarna, ikona_biala, ikona_szara, ikona_pusta;   
-        
+    protected ImageIcon ikona_czarna, ikona_biala, ikona_szara, ikona_pusta;  
+           
     private Szachownica() {    	
     	initializeGui();      
     }
@@ -98,7 +100,7 @@ public class Szachownica {
                     new JLabel(COLS.substring(x, x + 1),
                     SwingConstants.CENTER));
         }
-        // dodanie cyfr oznaczajacych pola szachownicy i pionkow 
+        // dodanie cyfr oznaczajacych pola szachownicy i pionkow na polach
     	for (int y = 0; y < 8; y++) {
     		for (int x = 0; x < 8; x++) { 
         		switch (x) {
@@ -119,7 +121,7 @@ public class Szachownica {
 		ikona_czarna = pobierzIkone("czarny.png");
 		ikona_biala = pobierzIkone("bialy.png");		
 		ikona_szara = pobierzIkone("zolty.png");
-		ikona_pusta = pobierzIkone("");
+		ikona_pusta = pobierzIkone("");			
     }
     
     private ImageIcon pobierzIkone(String plikIkony) {
@@ -145,35 +147,36 @@ public class Szachownica {
     }
     
     private class PoleSzachowe extends JToggleButton {
-    	
-    	public int polozenieX, polozenieY;
-    	
+    	    	
+    	protected Point polozenie = new Point();
+    	protected Point poprzednie_polozenie = PUSTY_PUNKT;
+    	    	
     	public PoleSzachowe(int x, int y) {
     		super();
     		// zapamietuje swoje polozenie oraz podstawowe ustawienia pola
-    		polozenieX = x;
-    		polozenieY = y;
+    		polozenie.x = x;
+    		polozenie.y = y;
     		setMargin(new Insets(0,0,0,0));  
-    		setEnabled(false);    		
-    		setIcon(ikona_pusta);
+    		setEnabled(false);
+    		setIcon(ikona_pusta);    
+    		setRolloverIcon(ikona_szara);
     		// ustawienia pola planszy
-    		if ((polozenieX % 2 == 1 && polozenieY % 2 == 1)                    
-                 || (polozenieX % 2 == 0 && polozenieY % 2 == 0)) {
+    		if ((polozenie.x % 2 == 1 && polozenie.y % 2 == 1)                    
+                 || (polozenie.x % 2 == 0 && polozenie.y % 2 == 0)) {
                 setBackground(Color.WHITE);
             } else {
-                setBackground(Color.BLACK);                
+                setBackground(Color.BLACK);                 
             }   
     		// ustawienie pionkow
-    		Boolean pionek = plansza.dajPlansze()[polozenieX][polozenieY].dajPionek();
+    		Boolean pionek = plansza.dajPlansze()[polozenie.x][polozenie.y].dajPionek();
     		
         	if (GRACZ.equals(pionek)) {
         		setIcon(ikona_biala);
         		setSelectedIcon(ikona_biala);    
-        		setDisabledIcon(ikona_biala);
-        		setRolloverIcon(ikona_szara);
-    			setEnabled(Ruch.dajRuchy(GRACZ, plansza.dajPlansze()).contains(new Point(polozenieX, polozenieY)));    			
+        		setDisabledIcon(ikona_biala);         		
+    			setEnabled(dajRuchy(GRACZ, plansza.dajPlansze()).contains(new Point(polozenie.x, polozenie.y)));    			
         	} else if (KOMPUTER.equals(pionek)) {		
-        		setDisabledIcon(ikona_czarna);        		
+        		setDisabledIcon(ikona_czarna);         		
         	}
             // dodanie logiki wykonywania ruchow
             addActionListener(new RuchGracza());          
@@ -184,19 +187,26 @@ public class Szachownica {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			
+			PoleSzachowe zrodlo_zdarzenia = (PoleSzachowe) e.getSource();		
 				
-			if (((PoleSzachowe)e.getSource()).isSelected()) {
-				int px = ((PoleSzachowe) e.getSource()).polozenieX;
-				int py = ((PoleSzachowe) e.getSource()).polozenieY;				
-				for (Point k : Ruch.dajRuchy(GRACZ, plansza.dajPlansze(), new Point(px,py))) {					
-					chessBoardSquares[k.x][k.y].setRolloverEnabled(true); 
-					chessBoardSquares[k.x][k.y].setRolloverIcon(ikona_szara);
-				    chessBoardSquares[k.x][k.y].setEnabled(true);
-				}		
+			if (((PoleSzachowe)e.getSource()).isSelected()) {				
+				if (zrodlo_zdarzenia.poprzednie_polozenie != PUSTY_PUNKT) {
+					wykonajRuch(plansza.dajPlansze(), zrodlo_zdarzenia.poprzednie_polozenie, zrodlo_zdarzenia.polozenie);
+					zrodlo_zdarzenia.poprzednie_polozenie = PUSTY_PUNKT;
+					przerysuj();
+				} else {
+					for (Point k : dajRuchy(GRACZ, plansza.dajPlansze(), zrodlo_zdarzenia.polozenie)) {					
+						PoleSzachowe pole = chessBoardSquares[k.x][k.y];
+						pole.setRolloverEnabled(true); 
+						pole.setEnabled(true);						
+						pole.poprzednie_polozenie = zrodlo_zdarzenia.polozenie;
+					}	
+				}	
 			} 
 		}    	
     } 
-    
+        
     // podklasa techniczna potrzebna, zeby przy ruchu bylo zaznaczane tylko jedno pole
     private class NoneSelectedButtonGroup extends ButtonGroup {
 
@@ -204,16 +214,14 @@ public class Szachownica {
 		public void setSelected(ButtonModel model, boolean selected) {
 
 		    if (selected) {              
-		        super.setSelected(model, selected);		       
-		    } else {		    	
+		        super.setSelected(model, selected);	
+		    } else {	
 		    	Enumeration<AbstractButton> pola = getElements();
 		    	while (pola.hasMoreElements()) {
-		    		PoleSzachowe pole = (PoleSzachowe)pola.nextElement();
+		    		PoleSzachowe pole = (PoleSzachowe)pola.nextElement();		    		
 		    		if (pole.isRolloverEnabled() && pole.getSelectedIcon() != ikona_biala) {
-			    		pole.setRolloverEnabled(false);	
-			    		pole.setRolloverIcon(ikona_pusta);
-			    		pole.setEnabled(false);
-		    		}
+			    		pole.setRolloverEnabled(false);				    					    		
+		    		}		    		
 		    	}
 		    	clearSelection();
 		    }

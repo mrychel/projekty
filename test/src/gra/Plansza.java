@@ -13,7 +13,7 @@ public class Plansza {
 		// null = puste pole
 		for (int x = 0; x < ROZMIAR_PLANSZY; x++) 
             for (int y = 0; y < ROZMIAR_PLANSZY; y++) 
-            	plansza[x][y] = new Pole(0, null);	
+            	plansza[x][y] = new Pole(0, PUSTE_POLE);	
 	}	                                                                                                                        
 	                                                                                                                            
 	public Pole[][] dajPlansze()                                                                                                  
@@ -49,34 +49,34 @@ public class Plansza {
 		// null = puste pole
 		for (int x = 0; x < ROZMIAR_PLANSZY; x++) 
             for (int y = 0; y < ROZMIAR_PLANSZY; y++) 
-            	plansza[x][y].ustawPionek(null);	
+            	plansza[x][y].ustawPionek(PUSTE_POLE);	
 		
     	// true = biale
-    	plansza[1][0].ustawPionek(false);
-    	plansza[3][0].ustawPionek(false);
-    	plansza[5][0].ustawPionek(false);
-    	plansza[7][0].ustawPionek(false);
-    	plansza[0][1].ustawPionek(false);
-    	plansza[2][1].ustawPionek(false);
-    	plansza[4][1].ustawPionek(false);
-    	plansza[6][1].ustawPionek(false);
-    	plansza[1][2].ustawPionek(false);
-    	plansza[3][2].ustawPionek(false);
-    	plansza[5][2].ustawPionek(false);
-    	plansza[7][2].ustawPionek(false);
+    	plansza[1][0].ustawPionek(KOMPUTER);
+    	plansza[3][0].ustawPionek(KOMPUTER);
+    	plansza[5][0].ustawPionek(KOMPUTER);
+    	plansza[7][0].ustawPionek(KOMPUTER);
+    	plansza[0][1].ustawPionek(KOMPUTER);
+    	plansza[2][1].ustawPionek(KOMPUTER);
+    	plansza[4][1].ustawPionek(KOMPUTER);
+    	plansza[6][1].ustawPionek(KOMPUTER);
+    	plansza[1][2].ustawPionek(KOMPUTER);
+    	plansza[3][2].ustawPionek(KOMPUTER);
+    	plansza[5][2].ustawPionek(KOMPUTER);
+    	plansza[7][2].ustawPionek(KOMPUTER);
     	// false = czarne
-    	plansza[1][6].ustawPionek(true);
-    	plansza[3][6].ustawPionek(true);
-    	plansza[5][6].ustawPionek(true);
-    	plansza[7][6].ustawPionek(true);
-    	plansza[0][7].ustawPionek(true);
-    	plansza[2][7].ustawPionek(true);
-    	plansza[4][7].ustawPionek(true);
-    	plansza[6][7].ustawPionek(true);
-    	plansza[0][5].ustawPionek(true);
-    	plansza[2][5].ustawPionek(true);
-    	plansza[4][5].ustawPionek(true);
-    	plansza[6][5].ustawPionek(true);
+    	plansza[1][6].ustawPionek(GRACZ);
+    	plansza[3][6].ustawPionek(GRACZ);
+    	plansza[5][6].ustawPionek(GRACZ);
+    	plansza[7][6].ustawPionek(GRACZ);
+    	plansza[0][7].ustawPionek(GRACZ);
+    	plansza[2][7].ustawPionek(GRACZ);
+    	plansza[4][7].ustawPionek(GRACZ);
+    	plansza[6][7].ustawPionek(GRACZ);
+    	plansza[0][5].ustawPionek(GRACZ);
+    	plansza[2][5].ustawPionek(GRACZ);
+    	plansza[4][5].ustawPionek(GRACZ);
+    	plansza[6][5].ustawPionek(GRACZ);
     }   
 	
 	public class Pole {
