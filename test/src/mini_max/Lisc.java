@@ -73,6 +73,7 @@ public class Lisc {
    
         
 	   Lisc naj = potomkowie.getFirst();
+	   naj.wypiszPlansze();
 	   /*
 	   for(Iterator<Lisc> i = potomkowie.iterator(); i.hasNext();){
            Lisc potomek = (Lisc) i.next();
