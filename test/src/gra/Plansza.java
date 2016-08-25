@@ -57,7 +57,7 @@ public class Plansza {
 		}     		
 	}
 		
-	public void rozstawPionki() {		
+	public void rozstawPionki() {
 		for (int x = 0; x < ROZMIAR_PLANSZY; x++) 
             for (int y = 0; y < ROZMIAR_PLANSZY; y++) 
             	plansza[x][y].ustawPionek(PUSTE_POLE);	

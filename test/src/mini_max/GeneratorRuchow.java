@@ -34,6 +34,3 @@ public class GeneratorRuchow {
 		     budujPodDrzewo(!kto, lisc, aktualnyPoziom++);
 	}  
 }
-	
-	
-
