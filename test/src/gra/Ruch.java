@@ -1,6 +1,9 @@
 package gra;
 
 import gra.Plansza.Pole;
+import mini_max.GeneratorRuchow;
+import mini_max.Lisc;
+
 import static gra.Stale.*;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -57,65 +60,20 @@ public class Ruch {
 			plansza[skad.x][skad.y].dajPionek());
 		plansza[skad.x][skad.y].ustawPionek(PUSTE_POLE);
 	}
-	/*
-	public static Pole[][] ruchLewo(String kto, Pole[][] plansza, int pionekWiersz, int pionekKolumna) {
 		
-		int skokWiersz;	
-		int skokKolumna = -1; 
-			
-		if (Stale.GRACZ.equals(kto)) 
-			skokWiersz = -1; 
-		else
-			skokWiersz = 1;
-		
-		plansza[pionekWiersz+skokWiersz][pionekKolumna+skokKolumna].ustawPionek(
-				plansza[pionekWiersz][pionekKolumna].dajPionek());
-		plansza[pionekWiersz][pionekKolumna].ustawPionek(Stale.POLE_PUSTE);
-		
-		if (pionekWiersz+skokWiersz == (Stale.GRACZ.equals(kto)?1:Stale.ROZMIAR_PLANSZY)) {
-			plansza[pionekWiersz+skokWiersz][pionekKolumna+skokKolumna].ustawPionek(Stale.POLE_PUSTE);
-			plansza[0][Stale.GRACZ.equals(kto)?1:2].ustawWartosc(
-					plansza[0][Stale.GRACZ.equals(kto)?1:2].dajWartosc()+1); 
-		} 
-		
-		return plansza;
-	}
-
-	public static Pole[][] ruchPrawo(String kto, Pole[][] plansza, int pionekWiersz, int pionekKolumna) {
-		
-		int skokWiersz;			
-		int skokKolumna = 1;
-		
-		if (Stale.GRACZ.equals(kto)) 
-			skokWiersz = -1; 
-		else
-			skokWiersz = 1;
-		
-		plansza[pionekWiersz+skokWiersz][pionekKolumna+skokKolumna].ustawPionek(
-				plansza[pionekWiersz][pionekKolumna].dajPionek());
-		plansza[pionekWiersz][pionekKolumna].ustawPionek(Stale.POLE_PUSTE);
-		
-		if (pionekWiersz+skokWiersz == (Stale.GRACZ.equals(kto)?1:Stale.ROZMIAR_PLANSZY)) {
-			plansza[pionekWiersz+skokWiersz][pionekKolumna+skokKolumna].ustawPionek(Stale.POLE_PUSTE);
-			plansza[0][Stale.GRACZ.equals(kto)?1:2].ustawWartosc(
-					plansza[0][Stale.GRACZ.equals(kto)?1:2].dajWartosc()+1); 
-		} 
-			
-		return plansza;
-	}
-	
 	public static Plansza ruchKomputera(Plansza aPlansza) {
 		
-		System.out.println("\n\n Ruch komputera:" );
 		Lisc drzewo = new Lisc(aPlansza.dajPlansze());
-		GeneratorRuchow.dajRuchy(Stale.KOMPUTER, aPlansza.dajPlansze(), drzewo, 0);
-		if (drzewo.dajNajRuch(true) == null) return null;
-		aPlansza.ustawPlansze(drzewo.dajNajRuch(true).dajPlansze());
-		aPlansza.ustawBicie(drzewo.dajNajRuch(true).jestBicie());
+		GeneratorRuchow.budujPodDrzewo(KOMPUTER, drzewo, 0);
+		if (drzewo.dajNajRuch() == null) return null;
+		aPlansza.ustawPlansze(drzewo.dajNajRuch().dajPlansze());
+		
 				
 		return aPlansza;		
 	}
-
+	
+	
+/*
 	public static Plansza ruchGracza(Plansza aPlansza) throws IOException {
 				
 		InputStreamReader isr = new InputStreamReader(System.in);

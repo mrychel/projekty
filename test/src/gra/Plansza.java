@@ -44,7 +44,7 @@ public class Plansza {
 		}     
 		
 	}
-	
+		
 	public void rozstawPionki() {
 		// null = puste pole
 		for (int x = 0; x < ROZMIAR_PLANSZY; x++) 
