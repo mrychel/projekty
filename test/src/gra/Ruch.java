@@ -62,7 +62,7 @@ public class Ruch {
 	}
 		
 	public static Plansza ruchKomputera(Plansza aPlansza) {
-		
+			
 		Lisc drzewo = new Lisc(aPlansza.dajPlansze());
 		GeneratorRuchow.budujPodDrzewo(KOMPUTER, drzewo, 0);
 		if (drzewo.dajNajRuch() == null) return null;

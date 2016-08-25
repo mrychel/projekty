@@ -6,6 +6,7 @@ import java.lang.Math;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
 import gra.Plansza.Pole;
 
 public class Lisc {
@@ -91,6 +92,14 @@ public class Lisc {
         return naj;
     }
     
+   	public void wypiszPlansze() {
+		for (int y = 0; y < ROZMIAR_PLANSZY; y++) {
+           System.out.println();
+			for (int x = 0; x < ROZMIAR_PLANSZY; x++) 
+           	System.out.print(plansza[x][y].dajPionek()+" ");
+		}     		
+	}		
+   
     public boolean jestBicie() {
     	
     	return jestBicie;
