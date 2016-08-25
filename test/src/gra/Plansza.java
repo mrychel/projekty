@@ -10,8 +10,7 @@ public class Plansza {
 	private Boolean czyjRuch; 
 	private boolean bicie = false;                                                                                         
                                                                                                                                 
-	public Plansza() {
-		
+	public Plansza() {		
 		for (int x = 0; x < ROZMIAR_PLANSZY; x++) 
             for (int y = 0; y < ROZMIAR_PLANSZY; y++) 
             	plansza[x][y] = new Pole(0, PUSTE_POLE);	
