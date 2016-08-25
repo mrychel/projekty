@@ -1,12 +1,8 @@
 package mini_max;
-import gra.Bicie;
-import gra.Ruch;
-import gra.Pole;
-import gra.Stale;
-
-import java.util.Arrays;
-import java.util.Iterator;
-
+import gra.Plansza.Pole;
+import static gra.Ruch.*;
+import static gra.Stale.*;
+import java.awt.Point;
 import mini_max.Heurystyka;
 import mini_max.Lisc;
 
@@ -14,108 +10,29 @@ import mini_max.Lisc;
 
 public class GeneratorRuchow {	
 	
-    public static void dajRuchy(String kto, Pole[][] plansza, Lisc drzewo, int aktualnyPoziom) {
-    	
-		String nastepnyRuch;
-		int najwiekszyPoziom = Stale.GLEBOKOSC_DRZEWA;
-		if (aktualnyPoziom <= najwiekszyPoziom) {
-			
-			String pionek = null;
-			String[] pionki = new String[12];
-			
-			if (Stale.GRACZ.equals(kto))
-				
-				pionki = Stale.CZARNE;
-			else 
-				pionki = Stale.BIALE;	
-			
-			for (int k=1; k<=Stale.ROZMIAR_PLANSZY; k++)
-	    		for (int w=1; w<=Stale.ROZMIAR_PLANSZY; w++) {
-		        	
-		        	Lisc potencjalnyRuchLewo;
-		        	Lisc potencjalnyRuchPrawo;
-		        	Lisc potencjalneBicieLewo;
-		        	Lisc potencjalneBiciePrawo;
-			        
-		        	if (plansza[w][k]!=null) {
-		        		
-		        		pionek = plansza[w][k].dajPionek();
-		        	
-		        		if (Arrays.asList(pionki).contains(pionek)) {
-
-			            	if (Ruch.mogeRuszycLewo(kto, plansza, w, k, false)) {
-			            	
-			            		Pole[][] x= copyBoard(plansza);		            		 
-			            		x = Ruch.ruchLewo(kto, x, w, k);
-			            		potencjalnyRuchLewo = new Lisc(x);
-			            		drzewo.getChildren().add(potencjalnyRuchLewo);
-			            		if (aktualnyPoziom == najwiekszyPoziom) 
-			            			potencjalnyRuchLewo.ustawWartosc(
-			            					Heurystyka.wyliczWartoscPlanszy(kto, potencjalnyRuchLewo, Stale.RUCH));	
-			            	}
-			        
-			            	if (Ruch.mogeRuszycPrawo(kto, plansza, w, k, false)) {
-			            		
-			            		Pole[][] y= copyBoard(plansza);
-			            		y = Ruch.ruchPrawo(kto, y, w, k);
-			            		potencjalnyRuchPrawo = new Lisc(y);
-			            		drzewo.getChildren().add(potencjalnyRuchPrawo); 
-			            		if (aktualnyPoziom == najwiekszyPoziom) 
-			            			potencjalnyRuchPrawo.ustawWartosc(
-			            					Heurystyka.wyliczWartoscPlanszy(kto, potencjalnyRuchPrawo, Stale.RUCH));
-			            	}
-			            	
-			            	if (Bicie.mogeBicLewo(kto, plansza, w, k, false)) {
-			            		
-			            		Pole[][] z = copyBoard(plansza);
-			            		z= Bicie.bicieLewo(kto, z, w, k, false);
-			            		potencjalneBicieLewo = new Lisc(z);
-			            		potencjalneBicieLewo.ustawJestBicie(true);
-			            		drzewo.getChildren().add(potencjalneBicieLewo);
-			            		potencjalneBicieLewo.ustawWartosc(
-			            				Heurystyka.wyliczWartoscPlanszy(kto, potencjalneBicieLewo, Stale.BICIE));
-			
-			            	}
-			            	
-			            	if (Bicie.mogeBicPrawo(kto, plansza, w, k, false)) {
-			            		
-			            		Pole[][]q= copyBoard(plansza);
-			            		q= Bicie.biciePrawo(kto, q, w, k, false);		            		
-			            		potencjalneBiciePrawo = new Lisc(q);
-			            		potencjalneBiciePrawo.ustawJestBicie(true);
-			            		drzewo.getChildren().add(potencjalneBiciePrawo);
-			            		potencjalneBiciePrawo.ustawWartosc(
-			            				Heurystyka.wyliczWartoscPlanszy(kto, potencjalneBiciePrawo, Stale.BICIE));
-			            	} 
-		        		}
-		        	}
-		        }
-		         
-		     }
-			
-		 nastepnyRuch = (Stale.GRACZ.equals(kto))? Stale.KOMPUTER: Stale.GRACZ;
-		 for (Iterator<Lisc> i = drzewo.getChildren().iterator(); i.hasNext();) {
-		 
-			 Lisc potomek = (Lisc) i.next();
-			 //if(!potomek.jestBicie()) 
-				 dajRuchy(nastepnyRuch, potomek.dajPlansze(), potomek,  aktualnyPoziom+1);
-		 }
-	}
- 
- 
-	public static Pole[][] copyBoard(Pole [][] plansza) {
+    public static void budujPodDrzewo(Boolean kto, Lisc korzen, int aktualnyPoziom) {
+    		
+		if (aktualnyPoziom > GLEBOKOSC_DRZEWA) return; 		
 		
-	    Pole [][] nowaPlansza = new Pole[Stale.ROZMIAR_PLANSZY+1][Stale.ROZMIAR_PLANSZY+1];	
-	    for (int k=0; k<=Stale.ROZMIAR_PLANSZY; k++)
-    		for (int w=0; w<=Stale.ROZMIAR_PLANSZY; w++) {	       
-	        	if (plansza[w][k]!=null) 	        	
-	            	nowaPlansza[w][k] = new Pole(plansza[w][k].dajWartosc(), plansza[w][k].dajPionek());
-	        	else	       
-	        		nowaPlansza[w][k] = null;	        
-	        }
-	     
-	    return nowaPlansza;
-	}		
+		// biore wszystkie pola mogace wykonac jakis ruch/bicie
+		for (Point skad : dajRuchy(kto, korzen.dajPlansze()))
+		
+			// dla kazdego z tych pol pobieram wszystkie mozliwe ruchy/bicia
+			for (Point dokad : dajRuchy(kto, korzen.dajPlansze(), skad)) {
+			
+				// tworze nowy lisc zawierajacy plansze po wykonaniu tego ruchu, 
+				// a jesli jestem na najnizszym poziomie to obliczam wartosc mini-maksowa takiej planszy
+        		Lisc nowyLisc = new Lisc(korzen.dajPlansze());
+        		wykonajRuch(nowyLisc.dajPlansze(), skad, dokad);
+        		korzen.getChildren().add(nowyLisc);
+        		if (aktualnyPoziom == GLEBOKOSC_DRZEWA) 
+        			nowyLisc.ustawWartosc(
+        					Heurystyka.wyliczWartoscPlanszy(kto, nowyLisc));	
+        	}
+		
+		for (Lisc lisc : korzen.getChildren()) 
+		     budujPodDrzewo(!kto, lisc, aktualnyPoziom++);
+	}  
 }
 	
 	

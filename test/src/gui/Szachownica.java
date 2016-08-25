@@ -7,6 +7,8 @@ import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -25,7 +27,7 @@ public class Szachownica {
     private Plansza plansza = new Plansza();
     private JPanel chessBoard = new JPanel(new GridLayout(0, 9));
     private JButton btnNowaGra = new JButton("Nowa gra");
-    private final JLabel message = new JLabel();
+    public final JLabel message = new JLabel();
     private final String strPlanszaGotowa = "Plansza gotowa do gry!";
     private static final String COLS = "ABCDEFGH";
     protected static final Point PUSTY_PUNKT = new Point(-1,-1); 
@@ -35,7 +37,7 @@ public class Szachownica {
     private Szachownica() {    	
     	initializeGui();      
     }
-
+        
     public static void main(String[]args) throws IOException
 	{
     	SwingUtilities.invokeLater(new Runnable() {
@@ -194,6 +196,7 @@ public class Szachownica {
 				if (zrodlo_zdarzenia.poprzednie_polozenie != PUSTY_PUNKT) {
 					wykonajRuch(plansza.dajPlansze(), zrodlo_zdarzenia.poprzednie_polozenie, zrodlo_zdarzenia.polozenie);
 					zrodlo_zdarzenia.poprzednie_polozenie = PUSTY_PUNKT;
+					ruchKomputera(plansza);
 					przerysuj();
 				} else {
 					for (Point k : dajRuchy(GRACZ, plansza.dajPlansze(), zrodlo_zdarzenia.polozenie)) {					

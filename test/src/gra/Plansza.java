@@ -6,34 +6,47 @@ import static gra.Stale.*;
 public class Plansza {                                                                                                            
 
 	private Pole[][] plansza = new Pole[ROZMIAR_PLANSZY][ROZMIAR_PLANSZY];  
+	private String komunikat = "";
+	private Boolean czyjRuch; 
 	private boolean bicie = false;                                                                                         
                                                                                                                                 
-	public Plansza()                                                                                                              
-	{   
-		// null = puste pole
+	public Plansza() {
+		
 		for (int x = 0; x < ROZMIAR_PLANSZY; x++) 
             for (int y = 0; y < ROZMIAR_PLANSZY; y++) 
             	plansza[x][y] = new Pole(0, PUSTE_POLE);	
 	}	                                                                                                                        
 	                                                                                                                            
-	public Pole[][] dajPlansze()                                                                                                  
-	{                                                                                                                           
+	public Pole[][] dajPlansze() {                                                                                                                           
 		return plansza;                                                                                                           
 	}                                                                                                                           
 	                               
-	public void ustawPlansze(Pole[][] aPlansza)
-	{
+	public void ustawPlansze(Pole[][] aPlansza) {
 		this.plansza = aPlansza;
 	}
 
-	public void ustawBicie(boolean bicie) {
-		
+	public void ustawBicie(boolean bicie) {		
 		this.bicie = bicie;		
 	}
 	
-	public boolean dajBicie()
-	{
+	public boolean dajBicie() {
 		return bicie;
+	}
+	
+	public void ustawKomuniakt(String komunikat) {
+		this.komunikat = komunikat;		
+	}
+	
+	public String dajKomunikat() {
+		return komunikat;
+	}
+	
+	public void czyjRuch(Boolean czyjRuch) {
+		this.czyjRuch = czyjRuch;		
+	}
+	
+	public boolean czyjRuch() {
+		return czyjRuch;
 	}
 	
 	public void wypiszPlansze() {
@@ -41,17 +54,14 @@ public class Plansza {
             System.out.println();
 			for (int x = 0; x < ROZMIAR_PLANSZY; x++) 
             	System.out.print(plansza[x][y].dajPionek()+" ");
-		}     
-		
+		}     		
 	}
-	
-	public void rozstawPionki() {
-		// null = puste pole
+		
+	public void rozstawPionki() {		
 		for (int x = 0; x < ROZMIAR_PLANSZY; x++) 
             for (int y = 0; y < ROZMIAR_PLANSZY; y++) 
             	plansza[x][y].ustawPionek(PUSTE_POLE);	
-		
-    	// true = biale
+		    	
     	plansza[1][0].ustawPionek(KOMPUTER);
     	plansza[3][0].ustawPionek(KOMPUTER);
     	plansza[5][0].ustawPionek(KOMPUTER);
@@ -64,7 +74,7 @@ public class Plansza {
     	plansza[3][2].ustawPionek(KOMPUTER);
     	plansza[5][2].ustawPionek(KOMPUTER);
     	plansza[7][2].ustawPionek(KOMPUTER);
-    	// false = czarne
+    	
     	plansza[1][6].ustawPionek(GRACZ);
     	plansza[3][6].ustawPionek(GRACZ);
     	plansza[5][6].ustawPionek(GRACZ);
@@ -84,29 +94,24 @@ public class Plansza {
 		private int wartosc;
 		private Boolean pionek;
 		
-		public Pole(int wartosc, Boolean pionek)	{
-			
+		public Pole(int wartosc, Boolean pionek) {			
 			this.wartosc = wartosc;
 			this.pionek = pionek;		
 		}
 		
-		public int dajWartosc()	{
-			
+		public int dajWartosc()	{			
 			return wartosc;
 		}
 		
-		public Boolean dajPionek() {
-			
+		public Boolean dajPionek() {			
 			return pionek;
 		}
 		
-		public void ustawPionek(Boolean nowyPionek) {
-			
+		public void ustawPionek(Boolean nowyPionek) {			
 			pionek= nowyPionek;
 		}	
 		
-		public void ustawWartosc(int nowaWartosc) {
-			
+		public void ustawWartosc(int nowaWartosc) {			
 			wartosc = nowaWartosc;
 		}	
 	}

@@ -1,14 +1,15 @@
 package mini_max;
-import gra.Pole;
-import gra.Stale;
 
+import static gra.Stale.*;
 import java.util.Arrays;
+import gra.Plansza.Pole;
 
 public class Heurystyka {
 	
-	static int wyliczWartoscPlanszy(String kto, Lisc drzewo, String ruch)
+	static int wyliczWartoscPlanszy(Boolean kto, Lisc drzewoh)
 	{
-		int suma = 0;
+		int suma = 10;
+		/*
 		Pole[][] plansza = drzewo.dajPlansze();		
 		String pionek = "";
 		
@@ -25,7 +26,7 @@ public class Heurystyka {
 			suma += 10*(Stale.GRACZ.equals(kto)?(-1):1);
 		// iloœæ damek
 		suma += (-50)*plansza[0][1].dajWartosc()+50*plansza[0][2].dajWartosc();
-			
+			*/
 		return suma;
 	}
 }
