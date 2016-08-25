@@ -2,7 +2,7 @@ package gra;
 
 import static gra.Stale.*;
 
-// przechowuje stan planszy (gry)
+// przechowuje stan planszy (gry) 
 public class Plansza {                                                                                                            
 
 	private Pole[][] plansza = new Pole[ROZMIAR_PLANSZY][ROZMIAR_PLANSZY];  
