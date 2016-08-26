@@ -175,8 +175,8 @@ public class Szachownica {
         	if (GRACZ.equals(pionek)) {
         		setIcon(ikona_biala);
         		setSelectedIcon(ikona_biala);    
-        		setDisabledIcon(ikona_biala);         		
-    			setEnabled(dajRuchy(GRACZ, plansza.dajPlansze()).contains(new Point(polozenie.x, polozenie.y)));    			
+        		setDisabledIcon(ikona_biala);        		
+    			setEnabled(dajRuchy(plansza).contains(new Point(polozenie.x, polozenie.y)));    			
         	} else if (KOMPUTER.equals(pionek)) {		
         		setDisabledIcon(ikona_czarna);         		
         	}
@@ -194,12 +194,13 @@ public class Szachownica {
 				
 			if (((PoleSzachowe)e.getSource()).isSelected()) {				
 				if (zrodlo_zdarzenia.poprzednie_polozenie != PUSTY_PUNKT) {
-					wykonajRuch(plansza.dajPlansze(), zrodlo_zdarzenia.poprzednie_polozenie, zrodlo_zdarzenia.polozenie);
+					wykonajRuch(plansza, zrodlo_zdarzenia.poprzednie_polozenie, zrodlo_zdarzenia.polozenie);
 					zrodlo_zdarzenia.poprzednie_polozenie = PUSTY_PUNKT;
 					ruchKomputera(plansza);
 					przerysuj();
 				} else {
-					for (Point k : dajRuchy(GRACZ, plansza.dajPlansze(), zrodlo_zdarzenia.polozenie)) {					
+					plansza.czyjRuch(GRACZ);
+					for (Point k : dajRuchy(plansza, zrodlo_zdarzenia.polozenie)) {					
 						PoleSzachowe pole = chessBoardSquares[k.x][k.y];
 						pole.setRolloverEnabled(true); 
 						pole.setEnabled(true);						

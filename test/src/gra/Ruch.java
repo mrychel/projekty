@@ -11,65 +11,66 @@ import java.util.ArrayList;
 public class Ruch {
  
 	// zwraca listê pól, dla danego gracza i danej planszy, majacych ruch lub bicie
-	public static ArrayList<Point> dajRuchy(Boolean kto, Pole[][] plansza) {
+	public static ArrayList<Point> dajRuchy(Plansza plansza) {
 		ArrayList<Point> polaMajaceRuch = new ArrayList<Point>();
 		
 		// TO DO ----- if dajBicia(kto, plansza)
 		for (int x = 0; x < ROZMIAR_PLANSZY; x++) 
             for (int y = 0; y < ROZMIAR_PLANSZY; y++)            	
-		    	if (kto.equals(plansza[x][y].dajPionek())) {
+		    	if (plansza.czyjRuch() != PUSTE_POLE && plansza.czyjRuch() == plansza.dajPlansze()[x][y].dajPionek()) {
 		    		Point m = new Point(x, y);	
-		    		if (!dajRuchy(kto, plansza, m).isEmpty()) polaMajaceRuch.add(m);						
+		    		if (!dajRuchy(plansza, m).isEmpty()) polaMajaceRuch.add(m);						
 		    	}
 		    
 		return polaMajaceRuch;
 	}
 	
 	// zwraca listê pól, dla danego gracza i planszy, na które mo¿e byæ wykonany ruch lub bicie
-	public static ArrayList<Point> dajRuchy(Boolean kto, Pole[][] plansza, Point p) {
+	public static ArrayList<Point> dajRuchy(Plansza plansza, Point p) {
 		ArrayList<Point> polaGdzieMoznaRuszyc = new ArrayList<Point>();
-		polaGdzieMoznaRuszyc.add(dajRuchPrawo(kto, plansza, p));
-		polaGdzieMoznaRuszyc.add(dajRuchLewo(kto, plansza, p));
+		polaGdzieMoznaRuszyc.add(dajRuchPrawo(plansza, p));
+		polaGdzieMoznaRuszyc.add(dajRuchLewo(plansza, p));
 		while (polaGdzieMoznaRuszyc.remove(null));	
 		return polaGdzieMoznaRuszyc;
 	}
 	
-	public static Point dajRuchPrawo(Boolean kto, Pole[][] plansza, Point p) {
+	private static Point dajRuchPrawo(Plansza plansza, Point p) {
 	
-		int docelowaKolumna = GRACZ.equals(kto) ? p.x+1 : p.x-1;
-		int docelowyWiersz = GRACZ.equals(kto) ? p.y-1 : p.y+1; 
+		int docelowaKolumna = GRACZ.equals(plansza.czyjRuch()) ? p.x+1 : p.x-1;
+		int docelowyWiersz = GRACZ.equals(plansza.czyjRuch()) ? p.y-1 : p.y+1; 
 		
 		return (czyNaPlanszy(docelowaKolumna, docelowyWiersz)
-				&& plansza[docelowaKolumna][docelowyWiersz].dajPionek() == PUSTE_POLE) ? 
+				&& plansza.dajPlansze()[docelowaKolumna][docelowyWiersz].dajPionek() == PUSTE_POLE) ? 
 				new Point(docelowaKolumna, docelowyWiersz) : null;		
 	}
 	
-	public static Point dajRuchLewo(Boolean kto, Pole[][] plansza, Point p) {	
+	private static Point dajRuchLewo(Plansza plansza, Point p) {	
 		
-		int docelowaKolumna = GRACZ.equals(kto) ? p.x-1 : p.x+1;
-		int docelowyWiersz = GRACZ.equals(kto) ? p.y-1 : p.y+1; 
+		int docelowaKolumna = GRACZ.equals(plansza.czyjRuch()) ? p.x-1 : p.x+1;
+		int docelowyWiersz = GRACZ.equals(plansza.czyjRuch()) ? p.y-1 : p.y+1; 
 		
 		return (czyNaPlanszy(docelowaKolumna, docelowyWiersz)
-				&& plansza[docelowaKolumna][docelowyWiersz].dajPionek() == PUSTE_POLE) ? 
+				&& plansza.dajPlansze()[docelowaKolumna][docelowyWiersz].dajPionek() == PUSTE_POLE) ? 
 				new Point(docelowaKolumna, docelowyWiersz) : null;	
 	}
 	
-	public static void wykonajRuch(Pole[][] plansza, Point skad, Point dokad) {
+	public static void wykonajRuch(Plansza plansza, Point skad, Point dokad) {
 	
-		plansza[dokad.x][dokad.y].ustawPionek(
-			plansza[skad.x][skad.y].dajPionek());
-		plansza[skad.x][skad.y].ustawPionek(PUSTE_POLE);
+		plansza.dajPlansze()[dokad.x][dokad.y].ustawPionek(
+			plansza.dajPlansze()[skad.x][skad.y].dajPionek());
+		plansza.dajPlansze()[skad.x][skad.y].ustawPionek(PUSTE_POLE);
+		plansza.czyjRuch(!plansza.czyjRuch());
 	}
 		
-	public static Plansza ruchKomputera(Plansza aPlansza) {
+	public static Plansza ruchKomputera(Plansza plansza) {
 			
-		Lisc drzewo = new Lisc(aPlansza.dajPlansze());
-		GeneratorRuchow.budujPodDrzewo(KOMPUTER, drzewo, 0);
+		Lisc drzewo = new Lisc(plansza);
+		GeneratorRuchow.budujPodDrzewo(drzewo, 0);
 		if (drzewo.dajNajRuch() == null) return null;
-		aPlansza.ustawPlansze(drzewo.dajNajRuch().dajPlansze());
+		plansza.ustawPlansze(drzewo.dajNajRuch().dajPlansze());
 		
 				
-		return aPlansza;		
+		return plansza;		
 	}
 	
 	

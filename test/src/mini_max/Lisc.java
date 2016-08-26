@@ -7,25 +7,19 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import gra.Plansza.Pole;
+import gra.Plansza;
 
-public class Lisc {
-    private LinkedList<Lisc>  potomkowie = new LinkedList<Lisc>();
-    private Pole[][] plansza;
+public class Lisc extends Plansza {
+    private LinkedList<Lisc>  potomkowie = new LinkedList<Lisc>();   
     private double wartosc= 0;
     private boolean jestBicie;
 
-   public Lisc(Pole[][] plansza) {
+   public Lisc(Plansza plansza) {
 	   
-	   this.plansza = kopiujPlansze(plansza);
+	   super(plansza);
    }
-    
-   public Pole[][] dajPlansze() {
-	   
-       return this.plansza;
-   }
-    
-   public List<Lisc> getChildren() {
+       
+   public List<Lisc> dajLiscie() {
 	   
     	return this.potomkowie;
    }
@@ -73,7 +67,7 @@ public class Lisc {
    
         
 	   Lisc naj = potomkowie.getFirst();
-	   naj.wypiszPlansze();
+	 
 	   /*
 	   for(Iterator<Lisc> i = potomkowie.iterator(); i.hasNext();){
            Lisc potomek = (Lisc) i.next();
@@ -81,24 +75,27 @@ public class Lisc {
        }*/
         //double maxPunkty = (czyKomputer ? Double.MIN_VALUE : Double.MAX_VALUE);
        int maxPunkty = Integer.MIN_VALUE;       
+       /*
        for(Lisc potomek : potomkowie){    	   
     	   double wartosc = potomek.minimax();
     	   naj = potomek;
-           /*if(naj == null || wartosc * (czyKomputer ? 1 : -1) > maxPunkty * (czyKomputer ? 1 : -1)){
+           if(naj == null || wartosc * (czyKomputer ? 1 : -1) > maxPunkty * (czyKomputer ? 1 : -1)){
             	maxPunkty = wartosc;
                 naj = potomek;
-            }*/
+            }
         }
-        
+        */
         return naj;
     }
     
-   	public void wypiszPlansze() {
-		for (int y = 0; y < ROZMIAR_PLANSZY; y++) {
+   	public void wypiszPlansze(String a) {
+		System.out.println("-----------------------"+a+"-------------------------");
+   		for (int y = 0; y < ROZMIAR_PLANSZY; y++) {
            System.out.println();
 			for (int x = 0; x < ROZMIAR_PLANSZY; x++) 
-           	System.out.print(plansza[x][y].dajPionek()+" ");
-		}     		
+           	System.out.print(dajPlansze()[x][y].dajPionek()+" ");
+		}   
+   		System.out.println("-----------------------K-"+a+"-K-------------------------");
 	}		
    
     public boolean jestBicie() {
@@ -110,10 +107,10 @@ public class Lisc {
     	
     	this.jestBicie = jestBicie;
     }
-    
+    /*
     private Pole[][] kopiujPlansze(Pole[][] plansza) {
 		Pole[][] nowaPlansza = new Pole[ROZMIAR_PLANSZY][ROZMIAR_PLANSZY];
 		System.arraycopy(plansza, 0, nowaPlansza, 0, plansza.length);
 		return nowaPlansza;
-	}	
+	}*/	
 }

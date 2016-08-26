@@ -7,14 +7,21 @@ public class Plansza {
 
 	private Pole[][] plansza = new Pole[ROZMIAR_PLANSZY][ROZMIAR_PLANSZY];  
 	private String komunikat = "";
-	private Boolean czyjRuch; 
+	private Boolean czyjRuch = GRACZ; 
 	private boolean bicie = false;                                                                                         
                                                                                                                                 
 	public Plansza() {		
 		for (int x = 0; x < ROZMIAR_PLANSZY; x++) 
             for (int y = 0; y < ROZMIAR_PLANSZY; y++) 
             	plansza[x][y] = new Pole(0, PUSTE_POLE);	
-	}	                                                                                                                        
+	}	
+	
+	public Plansza(Plansza plansza) {		
+		this.czyjRuch = plansza.czyjRuch;
+		for (int x = 0; x < ROZMIAR_PLANSZY; x++) 
+            for (int y = 0; y < ROZMIAR_PLANSZY; y++) 
+            	this.plansza[x][y] = new Pole(0, plansza.dajPlansze()[x][y].dajPionek());	
+	}
 	                                                                                                                            
 	public Pole[][] dajPlansze() {                                                                                                                           
 		return plansza;                                                                                                           
@@ -44,7 +51,7 @@ public class Plansza {
 		this.czyjRuch = czyjRuch;		
 	}
 	
-	public boolean czyjRuch() {
+	public Boolean czyjRuch() {
 		return czyjRuch;
 	}
 	

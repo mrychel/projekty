@@ -13,30 +13,33 @@ import mini_max.Lisc;
 
 public class GeneratorRuchow {	
 	
-    public static void budujPodDrzewo(Boolean kto, Lisc korzen, int aktualnyPoziom) {
+    public static void budujPodDrzewo(Lisc korzen, int aktualnyPoziom) {
     		
 		if (aktualnyPoziom > GLEBOKOSC_DRZEWA) return; 		
 		
-		ArrayList<Point> mmm = dajRuchy(kto, korzen.dajPlansze());
+		ArrayList<Point> mmm = dajRuchy(korzen);
 		
 		// biore wszystkie pola mogace wykonac jakis ruch/bicie
-		for (Point skad : dajRuchy(kto, korzen.dajPlansze()))
+		for (Point skad : dajRuchy(korzen))
 		
 			// dla kazdego z tych pol pobieram wszystkie mozliwe ruchy/bicia
-			for (Point dokad : dajRuchy(kto, korzen.dajPlansze(), skad)) {
+			for (Point dokad : dajRuchy(korzen, skad)) {
 			
 				// tworze nowy lisc zawierajacy plansze po wykonaniu tego ruchu, 
 				// a jesli jestem na najnizszym poziomie to obliczam wartosc mini-maksowa takiej planszy
-        		Lisc nowyLisc = new Lisc(korzen.dajPlansze());
-        		wykonajRuch(nowyLisc.dajPlansze(), skad, dokad);
-        		korzen.getChildren().add(nowyLisc);
-        		nowyLisc.wypiszPlansze();
+				
+				Lisc nowyLisc = new Lisc(korzen);
+				nowyLisc.wypiszPlansze("1");
+        		wykonajRuch(nowyLisc, skad, dokad);
+        		nowyLisc.wypiszPlansze("2");
+        		korzen.dajLiscie().add(nowyLisc);
+        		
         		if (aktualnyPoziom == GLEBOKOSC_DRZEWA) 
         			nowyLisc.ustawWartosc(
-        					Heurystyka.wyliczWartoscPlanszy(kto, nowyLisc));	
+        					Heurystyka.wyliczWartoscPlanszy(nowyLisc.czyjRuch(), nowyLisc));	
         	}
-		
+		/*
 		for (Lisc lisc : korzen.getChildren()) 
-		     budujPodDrzewo(!kto, lisc, aktualnyPoziom++);
+		     budujPodDrzewo(!kto, lisc, aktualnyPoziom++);*/
 	}  
 }
