@@ -14,7 +14,7 @@ public class Plansza {
 	public Plansza() {		
 		for (int x = 0; x < ROZMIAR_PLANSZY; x++) 
             for (int y = 0; y < ROZMIAR_PLANSZY; y++) 
-            	plansza[x][y] = new Pole(0, PUSTE_POLE);	
+            	plansza[x][y] = new Pole(y+1, PUSTE_POLE);	
 	}	
 	
 	public Plansza(Plansza plansza) {		
@@ -30,7 +30,8 @@ public class Plansza {
 		this.czyjRuch = plansza.czyjRuch;
 		for (int x = 0; x < ROZMIAR_PLANSZY; x++) 
             for (int y = 0; y < ROZMIAR_PLANSZY; y++) 
-            	this.plansza[x][y] = new Pole(0, plansza.dajPlansze()[x][y].dajPionek());
+            	this.plansza[x][y] = new Pole(plansza.dajPlansze()[x][y].dajWartosc(), 
+            								  plansza.dajPlansze()[x][y].dajPionek());
 	}
 
 	public void ustawBicie(boolean bicie) {		

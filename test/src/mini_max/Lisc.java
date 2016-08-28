@@ -1,17 +1,14 @@
 package mini_max;
 
-import static gra.Stale.ROZMIAR_PLANSZY;
-
+import static gra.Stale.*;
 import java.lang.Math;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
 import gra.Plansza;
 
 public class Lisc extends Plansza {
     private LinkedList<Lisc>  potomkowie = new LinkedList<Lisc>();   
-    private double wartosc= 0;
+    private Integer wartosc= 0;
     private boolean jestBicie;
 
    public Lisc(Plansza plansza) {
@@ -24,68 +21,48 @@ public class Lisc extends Plansza {
     	return this.potomkowie;
    }
     
-   public double dajWartosc() {
+   public Integer dajWartosc() {
 	   
 		return wartosc;    	
    }
     
-   public void ustawWartosc(double wartosc) {
+   public void ustawWartosc(Integer wartosc) {
     	
     	this.wartosc = wartosc;
    }
     
-   public double minimax() {
-   	   	 
-   	   /*
-	   if(this.getChildren().isEmpty()) 
+   public Integer minimax() {
+   	   
+	   if (this.potomkowie.isEmpty()) 
    		   return this.dajWartosc();
    	      		
-   	   if(czyKomputer){  // je¿eli komputer maksymalizyje punkty
-       
-   		   double a = Double.MIN_VALUE;
-           for(Iterator<Lisc> i = potomkowie.iterator(); i.hasNext();) {
-               Lisc drzewo =(Lisc)i.next();
-        	   a = Math.max(a, drzewo.minimax(!czyKomputer));
-           }
-           return a;
-       } else {   // je¿eli gracz - minimalizuje
+   	   // je¿eli komputer maksymalizyje punkty
+       // je¿eli gracz - minimalizuje
     	   
-           double a = Double.MAX_VALUE;
-           for(Iterator<Lisc> i = potomkowie.iterator(); i.hasNext();) {
-        	   Lisc drzewo = (Lisc)i.next();
-        	   a = Math.min(a, drzewo.minimax(!czyKomputer));
-           }
-           return a;
-   	   }*/
-	   return 10;
+       Integer wartosc = GRACZ.equals(this.czyjRuch()) ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+       for (Lisc lisc : potomkowie) {        	   
+    	   wartosc = GRACZ.equals(this.czyjRuch()) ? Math.min(wartosc, lisc.minimax()) 
+    			   								   : Math.max(wartosc, lisc.minimax());
+       }
+       return wartosc;   	  
    }
     
    public Lisc dajNajRuch() {
        
-	   if(potomkowie.isEmpty())
-           return null;
-   
+	   if (potomkowie.isEmpty())
+           return null;   
         
-	   Lisc naj = potomkowie.getFirst();
-	 
-	   /*
-	   for(Iterator<Lisc> i = potomkowie.iterator(); i.hasNext();){
-           Lisc potomek = (Lisc) i.next();
-           if (potomek.jestBicie()) return potomek;
-       }*/
-        //double maxPunkty = (czyKomputer ? Double.MIN_VALUE : Double.MAX_VALUE);
-       int maxPunkty = Integer.MIN_VALUE;       
-       /*
+	   Lisc najLisc = potomkowie.getFirst();	 
+	   Integer maxWartosc = GRACZ.equals(czyjRuch()) ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+       
        for(Lisc potomek : potomkowie){    	   
-    	   double wartosc = potomek.minimax();
-    	   naj = potomek;
-           if(naj == null || wartosc * (czyKomputer ? 1 : -1) > maxPunkty * (czyKomputer ? 1 : -1)){
-            	maxPunkty = wartosc;
-                naj = potomek;
+    	   Integer wartosc = potomek.minimax();    	   
+           if (wartosc * (GRACZ.equals(czyjRuch()) ? -1 : 1) > maxWartosc * (GRACZ.equals(czyjRuch()) ? -1 : 1)) {
+            	maxWartosc = wartosc;
+                najLisc = potomek;
             }
-        }
-        */
-        return naj;
+        }       
+        return najLisc;
     }
     
    	public void wypiszPlansze(String a) {
@@ -106,11 +83,5 @@ public class Lisc extends Plansza {
     public void ustawJestBicie(boolean jestBicie) {
     	
     	this.jestBicie = jestBicie;
-    }
-    /*
-    private Pole[][] kopiujPlansze(Pole[][] plansza) {
-		Pole[][] nowaPlansza = new Pole[ROZMIAR_PLANSZY][ROZMIAR_PLANSZY];
-		System.arraycopy(plansza, 0, nowaPlansza, 0, plansza.length);
-		return nowaPlansza;
-	}*/	
+    }   
 }

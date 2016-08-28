@@ -1,15 +1,10 @@
 package mini_max;
-import gra.Plansza.Pole;
+
 import static gra.Ruch.*;
 import static gra.Stale.*;
-
 import java.awt.Point;
-import java.util.ArrayList;
-
 import mini_max.Heurystyka;
 import mini_max.Lisc;
-
- 
 
 public class GeneratorRuchow {	
 	
@@ -32,7 +27,7 @@ public class GeneratorRuchow {
         		
         		if (aktualnyPoziom == GLEBOKOSC_DRZEWA) 
         			nowyLisc.ustawWartosc(
-        					Heurystyka.wyliczWartoscPlanszy(nowyLisc.czyjRuch(), nowyLisc));	
+        					Heurystyka.wyliczWartoscPlanszy(nowyLisc));	
         	}
 		
 		for (Lisc lisc : korzen.dajLiscie()) 

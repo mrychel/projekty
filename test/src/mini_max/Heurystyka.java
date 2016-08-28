@@ -1,32 +1,41 @@
 package mini_max;
 
 import static gra.Stale.*;
-import java.util.Arrays;
+import gra.Plansza;
 import gra.Plansza.Pole;
 
 public class Heurystyka {
+	// mozliwe udoskonalenia
+	// - sprawdzanie czy z danego pola jest ruch
+	// pola na skaraju planszy maja o polowe mniejsza premie, bo maja tylko ruch w jedna strone
+	// lub dla kazdego pola liczyc czy ma jeden czy dwa ruchy
 	
-	static int wyliczWartoscPlanszy(Boolean kto, Lisc drzewoh)
-	{
-		int suma = 10;
-		/*
-		Pole[][] plansza = drzewo.dajPlansze();		
-		String pionek = "";
+	// uwzglêdnianie bicia podwójnego
+	// wady: bicia premiuje tak samo dla siebie jak i dla gracza, tzn. poddaje pod bicie jeœli mo¿e
+	
+	static int wyliczWartoscPlanszy(Plansza plansza) {
 		
-		for (int k=1; k<=Stale.ROZMIAR_PLANSZY; k++)
-    		for (int w=1; w<=Stale.ROZMIAR_PLANSZY; w++) {
-	        	pionek = (plansza[w][k]!=null)?plansza[w][k].dajPionek():"";		            
-	        	if (plansza[w][k]!=null && !Stale.POLE_PUSTE.equals(pionek))
-	            	if(Arrays.asList(Stale.BIALE).contains(pionek))		            		            		
-	            		suma += plansza[w][k].dajWartosc()*1;		            	
-	        		if(Arrays.asList(Stale.CZARNE).contains(pionek))
-	            		suma += (9-plansza[w][k].dajWartosc())*(-1);
+		int suma = 0;
+						
+		// im bli¿ej koñca planszy tym wiêksza wartoœæ pola
+		for (int x = 0; x < ROZMIAR_PLANSZY; x++) 
+            for (int y = 0; y < ROZMIAR_PLANSZY; y++) {
+            	Pole pole = plansza.dajPlansze()[x][y];
+            	if (GRACZ.equals(pole.dajPionek())) {
+            		suma += pole.dajWartosc()*1;
+            		// premia za damke
+            		if (y == 1) suma += pole.dajWartosc()*(-50);
+            	}
+            	if (KOMPUTER.equals(pole.dajPionek())) {
+            		suma += (9-pole.dajWartosc())*(-1);
+            		// premia za damke
+            		if (y == 8) suma += pole.dajWartosc()*(50);
+            	}
             }
-		if (Stale.BICIE.equals(ruch))
-			suma += 10*(Stale.GRACZ.equals(kto)?(-1):1);
-		// iloœæ damek
-		suma += (-50)*plansza[0][1].dajWartosc()+50*plansza[0][2].dajWartosc();
-			*/
+		// premia za bicie		
+		if (plansza.dajBicie())
+			suma += 10*(GRACZ.equals(plansza.czyjRuch())?(-1):1);
+		
 		return suma;
 	}
 }
