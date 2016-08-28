@@ -17,8 +17,6 @@ public class GeneratorRuchow {
     		
 		if (aktualnyPoziom > GLEBOKOSC_DRZEWA) return; 		
 		
-		ArrayList<Point> mmm = dajRuchy(korzen);
-		
 		// biore wszystkie pola mogace wykonac jakis ruch/bicie
 		for (Point skad : dajRuchy(korzen))
 		
@@ -28,18 +26,16 @@ public class GeneratorRuchow {
 				// tworze nowy lisc zawierajacy plansze po wykonaniu tego ruchu, 
 				// a jesli jestem na najnizszym poziomie to obliczam wartosc mini-maksowa takiej planszy
 				
-				Lisc nowyLisc = new Lisc(korzen);
-				nowyLisc.wypiszPlansze("1");
-        		wykonajRuch(nowyLisc, skad, dokad);
-        		nowyLisc.wypiszPlansze("2");
+				Lisc nowyLisc = new Lisc(korzen);				
+        		wykonajRuch(nowyLisc, skad, dokad);        		
         		korzen.dajLiscie().add(nowyLisc);
         		
         		if (aktualnyPoziom == GLEBOKOSC_DRZEWA) 
         			nowyLisc.ustawWartosc(
         					Heurystyka.wyliczWartoscPlanszy(nowyLisc.czyjRuch(), nowyLisc));	
         	}
-		/*
-		for (Lisc lisc : korzen.getChildren()) 
-		     budujPodDrzewo(!kto, lisc, aktualnyPoziom++);*/
+		
+		for (Lisc lisc : korzen.dajLiscie()) 
+		     budujPodDrzewo(lisc, aktualnyPoziom++);
 	}  
 }

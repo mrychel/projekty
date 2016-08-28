@@ -1,10 +1,9 @@
 package gra;
 
-import gra.Plansza.Pole;
 import mini_max.GeneratorRuchow;
 import mini_max.Lisc;
-
 import static gra.Stale.*;
+
 import java.awt.Point;
 import java.util.ArrayList;
 
@@ -60,15 +59,17 @@ public class Ruch {
 			plansza.dajPlansze()[skad.x][skad.y].dajPionek());
 		plansza.dajPlansze()[skad.x][skad.y].ustawPionek(PUSTE_POLE);
 		plansza.czyjRuch(!plansza.czyjRuch());
-	}
-		
+		String komunikat = GRACZ.equals(!plansza.czyjRuch()) ? "GRACZ" : "KOMPUTER"
+						   +" wykona³ ruch: "+dajNazweRuchu(skad)+" na "+dajNazweRuchu(dokad);
+		plansza.ustawKomuniakt(komunikat);
+	}		
+	
 	public static Plansza ruchKomputera(Plansza plansza) {
 			
 		Lisc drzewo = new Lisc(plansza);
 		GeneratorRuchow.budujPodDrzewo(drzewo, 0);
 		if (drzewo.dajNajRuch() == null) return null;
-		plansza.ustawPlansze(drzewo.dajNajRuch().dajPlansze());
-		
+		plansza.ustawPlansze(drzewo.dajNajRuch());	
 				
 		return plansza;		
 	}
@@ -149,5 +150,9 @@ public class Ruch {
 		
 		return wiersz < ROZMIAR_PLANSZY  && kolumna < ROZMIAR_PLANSZY 
 				&& wiersz >= 0 && kolumna >= 0;
+	}
+	
+	private static String dajNazweRuchu(Point p) {	    
+	    return COLS.substring(p.x, p.x + 1) + (p.y+1);	    
 	}
 }

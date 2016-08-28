@@ -15,10 +15,9 @@ public final class Stale {
 	public final static Boolean GRACZ = true;
 	public final static Boolean KOMPUTER = false;
 	public final static Boolean PUSTE_POLE = null;
-	public static final int ROZMIAR_PLANSZY = 8;	
-	public static final int GLEBOKOSC_DRZEWA = 1;
-	
+	public final static int ROZMIAR_PLANSZY = 8;	
+	public final static int GLEBOKOSC_DRZEWA = 1;
+	public final static String COLS = "ABCDEFGH";	
 
-	public static final String WYJSCIE = "EXIT";
-	public static final String POKAZ = "POKAZ";
+	public final static String WYJSCIE = "EXIT";	
 }

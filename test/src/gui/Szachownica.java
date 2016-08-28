@@ -4,12 +4,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -27,9 +23,7 @@ public class Szachownica {
     private Plansza plansza = new Plansza();
     private JPanel chessBoard = new JPanel(new GridLayout(0, 9));
     private JButton btnNowaGra = new JButton("Nowa gra");
-    public final JLabel message = new JLabel();
-    private final String strPlanszaGotowa = "Plansza gotowa do gry!";
-    private static final String COLS = "ABCDEFGH";
+    public final JLabel message = new JLabel();    
     protected static final Point PUSTY_PUNKT = new Point(-1,-1); 
     protected PoleSzachowe[][] chessBoardSquares = new PoleSzachowe[ROZMIAR_PLANSZY][ROZMIAR_PLANSZY];
     protected ImageIcon ikona_czarna, ikona_biala, ikona_szara, ikona_pusta;  
@@ -60,8 +54,7 @@ public class Szachownica {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				plansza.rozstawPionki(); 				
-				przerysuj();	
-				message.setText(strPlanszaGotowa);				
+				przerysuj();								
 			}
 		});
 		       
@@ -87,6 +80,7 @@ public class Szachownica {
     
     private void przerysuj() {
     	chessBoard.removeAll();
+    	chessBoardSquares = new PoleSzachowe[ROZMIAR_PLANSZY][ROZMIAR_PLANSZY];
     	btn = new NoneSelectedButtonGroup();
     	// przygotowanie pol szachownicy
     	for (int x = 0; x < ROZMIAR_PLANSZY; x++) {
@@ -113,8 +107,9 @@ public class Szachownica {
 	                	chessBoard.add(chessBoardSquares[x][y]);
 	            }
             }
-        }
-        chessBoard.validate();       
+        }    
+    	message.setText(plansza.dajKomunikat());	
+    	chessBoard.validate();
     }   
     
     // ikony pionkow    
@@ -150,7 +145,7 @@ public class Szachownica {
     
     private class PoleSzachowe extends JToggleButton {
     	    	
-    	protected Point polozenie = new Point();
+    	public Point polozenie = new Point();
     	protected Point poprzednie_polozenie = PUSTY_PUNKT;
     	    	
     	public PoleSzachowe(int x, int y) {
@@ -175,8 +170,8 @@ public class Szachownica {
         	if (GRACZ.equals(pionek)) {
         		setIcon(ikona_biala);
         		setSelectedIcon(ikona_biala);    
-        		setDisabledIcon(ikona_biala);        		
-    			setEnabled(dajRuchy(plansza).contains(new Point(polozenie.x, polozenie.y)));    			
+        		setDisabledIcon(ikona_biala);   
+        		setEnabled(dajRuchy(plansza).contains(new Point(polozenie.x, polozenie.y)));        		
         	} else if (KOMPUTER.equals(pionek)) {		
         		setDisabledIcon(ikona_czarna);         		
         	}

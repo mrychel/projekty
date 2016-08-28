@@ -8,7 +8,8 @@ public class Plansza {
 	private Pole[][] plansza = new Pole[ROZMIAR_PLANSZY][ROZMIAR_PLANSZY];  
 	private String komunikat = "";
 	private Boolean czyjRuch = GRACZ; 
-	private boolean bicie = false;                                                                                         
+	private boolean bicie = false;  
+	private final String strPlanszaGotowa = "Plansza gotowa do gry!";    
                                                                                                                                 
 	public Plansza() {		
 		for (int x = 0; x < ROZMIAR_PLANSZY; x++) 
@@ -17,18 +18,19 @@ public class Plansza {
 	}	
 	
 	public Plansza(Plansza plansza) {		
-		this.czyjRuch = plansza.czyjRuch;
-		for (int x = 0; x < ROZMIAR_PLANSZY; x++) 
-            for (int y = 0; y < ROZMIAR_PLANSZY; y++) 
-            	this.plansza[x][y] = new Pole(0, plansza.dajPlansze()[x][y].dajPionek());	
+		ustawPlansze(plansza);	
 	}
 	                                                                                                                            
 	public Pole[][] dajPlansze() {                                                                                                                           
 		return plansza;                                                                                                           
 	}                                                                                                                           
 	                               
-	public void ustawPlansze(Pole[][] aPlansza) {
-		this.plansza = aPlansza;
+	public void ustawPlansze(Plansza plansza) {
+		this.komunikat = plansza.komunikat;
+		this.czyjRuch = plansza.czyjRuch;
+		for (int x = 0; x < ROZMIAR_PLANSZY; x++) 
+            for (int y = 0; y < ROZMIAR_PLANSZY; y++) 
+            	this.plansza[x][y] = new Pole(0, plansza.dajPlansze()[x][y].dajPionek());
 	}
 
 	public void ustawBicie(boolean bicie) {		
@@ -64,6 +66,7 @@ public class Plansza {
 	}
 		
 	public void rozstawPionki() {
+		this.komunikat = strPlanszaGotowa;
 		for (int x = 0; x < ROZMIAR_PLANSZY; x++) 
             for (int y = 0; y < ROZMIAR_PLANSZY; y++) 
             	plansza[x][y].ustawPionek(PUSTE_POLE);	
