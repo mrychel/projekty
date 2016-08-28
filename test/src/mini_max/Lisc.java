@@ -8,8 +8,7 @@ import gra.Plansza;
 
 public class Lisc extends Plansza {
     private LinkedList<Lisc>  potomkowie = new LinkedList<Lisc>();   
-    private Integer wartosc= 0;
-    private boolean jestBicie;
+    private Integer wartosc= 0;    
 
    public Lisc(Plansza plansza) {
 	   
@@ -63,25 +62,5 @@ public class Lisc extends Plansza {
             }
         }       
         return najLisc;
-    }
-    
-   	public void wypiszPlansze(String a) {
-		System.out.println("-----------------------"+a+"-------------------------");
-   		for (int y = 0; y < ROZMIAR_PLANSZY; y++) {
-           System.out.println();
-			for (int x = 0; x < ROZMIAR_PLANSZY; x++) 
-           	System.out.print(dajPlansze()[x][y].dajPionek()+" ");
-		}   
-   		System.out.println("-----------------------K-"+a+"-K-------------------------");
-	}		
-   
-    public boolean jestBicie() {
-    	
-    	return jestBicie;
-    }
-
-    public void ustawJestBicie(boolean jestBicie) {
-    	
-    	this.jestBicie = jestBicie;
-    }   
+    }    
 }

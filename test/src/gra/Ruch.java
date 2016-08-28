@@ -86,79 +86,7 @@ public class Ruch {
 				
 		return plansza;		
 	}
-	
-	
-/*
-	public static Plansza ruchGracza(Plansza aPlansza) throws IOException {
-				
-		InputStreamReader isr = new InputStreamReader(System.in);
-		BufferedReader br = new BufferedReader(isr);
-		while (true) {
-		System.out.println("Podaj ruch w nastêpuj¹cy sposób:  'b1 lewo' ");
-		System.out.println("Poprawne ruch: prawo, lewo, bicie_prawo, bicie_lewo, exit, pokaz");
-			
-		String command = br.readLine();
-		StringTokenizer commandTokens = new StringTokenizer(command);				
-		
-		String pole = commandTokens.nextToken().toUpperCase();
-		
-		if (pole.length() < 2) {
-			System.out.println("Podaj poprawne pole planszy.");
-			continue;
-		} else if (Stale.POKAZ.equals(pole)) {
-			aPlansza.pokazPlansze();	
-			continue;
-		} else if (Stale.WYJSCIE.equals(pole)) {
-			System.out.println("Koniec.");
-			System.exit(0);
-		} else if ("12345678".indexOf(pole.substring(1, 2)) == -1
-				   || "ABCDEFGH".indexOf(pole.substring(0, 1)) == -1
-				   || aPlansza.dajPlansze()["12345678".indexOf(pole.substring(1, 2))+1]["ABCDEFGH".indexOf(pole.substring(0, 1))+1] == null
-				   || Arrays.asList(Stale.BIALE).contains(
-						   aPlansza.dajPlansze()["12345678".indexOf(pole.substring(1, 2))+1]["ABCDEFGH".indexOf(pole.substring(0, 1))+1].dajPionek())
-				   ) {
-			System.out.println("Mo¿esz poruszaæ tylko pionkami x.");
-			continue;
-		} else if(commandTokens.countTokens() != 1) {
-			System.out.println("Proszê podaj pionka i komendê.");
-			continue;
-		}
 
-		String pionek = aPlansza.dajPlansze()["12345678".indexOf(pole.substring(1, 2))+1]["ABCDEFGH".indexOf(pole.substring(0, 1))+1].dajPionek();
-		String ruch = commandTokens.nextToken();
-				
-		if (Stale.RUCH_PRAWO.equals(ruch) || Stale.RUCH_LEWO.equals(ruch)) {
-			
-			for (int k=1; k<=Stale.ROZMIAR_PLANSZY; k++)
-	    		for (int w=1; w<=Stale.ROZMIAR_PLANSZY; w++) 
-	        	    if (aPlansza.dajPlansze()[w][k]!=null && 
-	        		    aPlansza.dajPlansze()[w][k].dajPionek().equals(pionek)) {
-	        		 	        		 
-	        		    if (Ruch.mogeRuszyc(ruch, Stale.GRACZ, aPlansza.dajPlansze(), w, k, true)) {		        			
-		        			aPlansza.ustawPlansze(Ruch.move(ruch, Stale.GRACZ, aPlansza.dajPlansze(), w, k));
-		        			return aPlansza;	        			 
-	        		    }
-		            }	        	 
-	    } else if (Stale.BICIE_PRAWO.equals(ruch) || Stale.BICIE_LEWO.equals(ruch)) {
-			
-	    	for (int k=1; k<=Stale.ROZMIAR_PLANSZY; k++)
-	    		for (int w=1; w<=Stale.ROZMIAR_PLANSZY; w++) 
-	        	    if (aPlansza.dajPlansze()[w][k]!=null && 
-	        		    aPlansza.dajPlansze()[w][k].dajPionek().equals(pionek)) {
-	        		 	        		 
-		        		if (Bicie.mogeBic(ruch, Stale.GRACZ, aPlansza.dajPlansze(), w, k, true)) {
-		        			
-		        			 Bicie.bicie(ruch, Stale.GRACZ, aPlansza.dajPlansze(), w, k, true);		        			
-		        			 aPlansza.ustawBicie(true);
-		        			 return aPlansza;
-		        		 } else 
-		        			 System.out.println("Nie mo¿esz biæ.");
-	        	    }		
-		} else 
-			System.out.println("Nierozpoznana komenda.");	
-		}			
-	}
-*/
 	public static boolean czyNaPlanszy(Point p) {
 		
 		return p.x < ROZMIAR_PLANSZY  && p.y < ROZMIAR_PLANSZY 
