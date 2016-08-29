@@ -4,6 +4,7 @@ import mini_max.GeneratorRuchow;
 import mini_max.Lisc;
 import static gra.Bicie.*;
 import static gra.Stale.*;
+import mini_max.Heurystyka;
 import java.awt.Point;
 import java.util.ArrayList;
 
@@ -22,7 +23,15 @@ public class Ruch {
 		    		Point m = new Point(x, y);	
 		    		if (!dajRuchy(plansza, m).isEmpty()) polaMajaceRuch.add(m);						
 		    	}
-		    
+		if (polaMajaceRuch.isEmpty()) {			
+			plansza.czyjRuch(GRACZ);
+			int punktyGracza = Heurystyka.wyliczWartoscPlanszy(plansza);
+			plansza.czyjRuch(KOMPUTER);
+			int punktyKomputera = Heurystyka.wyliczWartoscPlanszy(plansza);
+			plansza.ustawKomuniakt("<html>Koniec gry. Brak mo¿liwoœci wykonania ruchu. <br>"+
+								   "Gracz "+plansza.ilosc_damek_gracza+" damek. Komputer "+plansza.ilosc_damek_komputera+" damek.<br>"+
+								   "Gracz "+punktyGracza+" punktów. Komputer "+punktyKomputera+" punktów.</html>");
+		}
 		return polaMajaceRuch;
 	}
 	
@@ -70,6 +79,16 @@ public class Ruch {
 		} else 
 			plansza.ustawBicie(false);
 		// koniec bicia
+		// damka
+		if (GRACZ.equals(plansza.czyjRuch()) && dokad.y == 0) {
+			plansza.ilosc_damek_gracza++;
+			plansza.dajPlansze()[dokad.x][dokad.y].ustawPionek(PUSTE_POLE);
+		}
+		if (KOMPUTER.equals(plansza.czyjRuch()) && dokad.y == ROZMIAR_PLANSZY - 1) {
+			plansza.ilosc_damek_komputera++;
+			plansza.dajPlansze()[dokad.x][dokad.y].ustawPionek(PUSTE_POLE);
+		}
+		// koniec ruchu damki
 		plansza.czyjRuch(!plansza.czyjRuch());
 		String komunikat = GRACZ.equals(!plansza.czyjRuch()) ? "GRACZ" : "KOMPUTER"
 						   +" wykona³ "+ (plansza.dajBicie() ? "bicie: " : "ruch: ")
@@ -77,14 +96,21 @@ public class Ruch {
 		plansza.ustawKomuniakt(komunikat);
 	}		
 	
-	public static Plansza ruchKomputera(Plansza plansza) {
+	public static void ruchKomputera(Plansza plansza) {
 			
 		Lisc drzewo = new Lisc(plansza);
-		GeneratorRuchow.budujPodDrzewo(drzewo, 0);
-		if (drzewo.dajNajRuch() == null) return null;
-		plansza.ustawPlansze(drzewo.dajNajRuch());	
-				
-		return plansza;		
+		GeneratorRuchow.budujPodDrzewo(drzewo, 0);		
+		if (drzewo.dajNajRuch() != null)
+			plansza.ustawPlansze(drzewo.dajNajRuch());
+		else {				
+			plansza.czyjRuch(GRACZ);
+			int punktyGracza = Heurystyka.wyliczWartoscPlanszy(plansza);
+			plansza.czyjRuch(KOMPUTER);
+			int punktyKomputera = Heurystyka.wyliczWartoscPlanszy(plansza);
+			plansza.ustawKomuniakt("<html>Koniec gry. Brak mo¿liwoœci wykonania ruchu.<br>"+
+								   "Gracz "+plansza.ilosc_damek_gracza+" damek. Komputer "+plansza.ilosc_damek_komputera+" damek.<br>"+
+								   "Gracz "+punktyGracza+" punktów. Komputer "+punktyKomputera+" punktów.</html>");		
+		}			
 	}
 
 	public static boolean czyNaPlanszy(Point p) {

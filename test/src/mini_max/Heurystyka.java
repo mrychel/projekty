@@ -5,15 +5,8 @@ import gra.Plansza;
 import gra.Plansza.Pole;
 
 public class Heurystyka {
-	// mozliwe udoskonalenia
-	// - sprawdzanie czy z danego pola jest ruch
-	// pola na skaraju planszy maja o polowe mniejsza premie, bo maja tylko ruch w jedna strone
-	// lub dla kazdego pola liczyc czy ma jeden czy dwa ruchy
-	
-	// uwzglêdnianie bicia podwójnego
-	// wady: bicia premiuje tak samo dla siebie jak i dla gracza, tzn. poddaje pod bicie jeœli mo¿e
-	
-	static int wyliczWartoscPlanszy(Plansza plansza) {
+		
+	public static int wyliczWartoscPlanszy(Plansza plansza) {
 		
 		int suma = 0;
 						
@@ -22,20 +15,22 @@ public class Heurystyka {
             for (int y = 0; y < ROZMIAR_PLANSZY; y++) {
             	Pole pole = plansza.dajPlansze()[x][y];
             	if (GRACZ.equals(pole.dajPionek())) {
-            		suma += pole.dajWartosc()*1;
-            		// premia za damke
+            		suma += pole.dajWartosc()*(-1);            	
+            		// premia za potencjalna damke
             		if (y == 1) suma += pole.dajWartosc()*(-50);
             	}
             	if (KOMPUTER.equals(pole.dajPionek())) {
-            		suma += (9-pole.dajWartosc())*(-1);
-            		// premia za damke
+            		suma += (9-pole.dajWartosc())*(1);
+            		// premia za potencjalna damke
             		if (y == 8) suma += pole.dajWartosc()*(50);
             	}
             }
 		// premia za bicie		
 		if (plansza.dajBicie())
 			suma += 10*(GRACZ.equals(plansza.czyjRuch())?(-1):1);
-		
+		// premia za damki
+		suma += (-50)*plansza.ilosc_damek_gracza;
+		suma += 50*plansza.ilosc_damek_komputera;
 		return suma;
 	}
 }

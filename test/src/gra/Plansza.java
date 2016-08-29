@@ -10,6 +10,8 @@ public class Plansza {
 	private Boolean czyjRuch = GRACZ; 
 	private boolean bicie = false;  
 	private final String strPlanszaGotowa = "Plansza gotowa do gry!";    
+	public int ilosc_damek_gracza = 0;
+	public int ilosc_damek_komputera = 0;
                                                                                                                                 
 	public Plansza() {		
 		for (int x = 0; x < ROZMIAR_PLANSZY; x++) 

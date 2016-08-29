@@ -117,7 +117,7 @@ public class Szachownica {
     			
 		ikona_czarna = pobierzIkone("czarny.png");
 		ikona_biala = pobierzIkone("bialy.png");		
-		ikona_szara = pobierzIkone("zolty.png");
+		ikona_szara = pobierzIkone("zielony.png");
 		ikona_pusta = pobierzIkone("");			
     }
     
