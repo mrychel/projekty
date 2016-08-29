@@ -1,4 +1,4 @@
-package aa;
+package kamera;
 
 public class Punkt3D {
 	

@@ -1,4 +1,4 @@
-package aa;
+package kamera;
 
 import java.awt.Dimension;
 
