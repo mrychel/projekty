@@ -1,9 +1,26 @@
 package kamera;
 
 import java.awt.Dimension;
+import java.util.ArrayList;
 
-public class Przestrzen {
+import narzedzia.Punkt3D;
+
+public class GeneratorPrzestrzeni {
 	
+	public GeneratorPrzestrzeni() {
+		
+	}
+	
+	public static ArrayList<Punkt3D> dajPrzestrzen() {
+		ArrayList<Punkt3D> punktyPrzestrzeni = new ArrayList<Punkt3D>();
+		punktyPrzestrzeni.add(new Punkt3D(10, 20, 30));
+		punktyPrzestrzeni.add(new Punkt3D(30, 20, 30));
+		punktyPrzestrzeni.add(new Punkt3D(10, 30, 30));
+		punktyPrzestrzeni.add(new Punkt3D(30, 30, 30));
+		
+		return punktyPrzestrzeni;
+	}
+	/*
 	public class Linia {
 	    Punkt3D pocz, kon;	
 	    
@@ -42,5 +59,5 @@ public class Przestrzen {
 			P[i] = new Linia();
 		    P[i+1] = new Linia();
 	    }
-   }
+   }*/
 }

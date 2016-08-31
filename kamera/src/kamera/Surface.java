@@ -10,7 +10,7 @@ public class Surface extends JPanel {
 	    private void doDrawing(Graphics g) {
 
 	        Graphics2D g2d = (Graphics2D) g;
-            Przestrzen p = new Przestrzen();
+            GeneratorPrzestrzeni p = new GeneratorPrzestrzeni();
 	        //System.out.println(p.P[0][1].x);
 	        //System.out.println(p.P[0][0].y);
 	        Przeksztalcenia pr = new Przeksztalcenia();

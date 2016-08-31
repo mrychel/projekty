@@ -24,11 +24,15 @@ public class Kamera {
     private final void initializeGui() {
         
     	JToolBar tools = new JToolBar("dd");
-        tools.setFloatable(true);
-        tools.add(new JLabel("tst"));      
-        tools.addSeparator();
-        tools.add(new Przycisk("Przybli¿enie:"));
-        
+    	tools.setLayout(new GridLayout(0, 1));
+        tools.setFloatable(false);
+        tools.add(new Przycisk3D("Przesuniêcie:"));
+        //tools.addSeparator();
+        tools.add(new Przycisk3D("Obrót:"));
+        tools.add(new Przycisk3D("Powiêkszenie:"));
+        tools.add(new Przycisk3D("Pochylenie:"));
+        tools.add(new Przycisk("Ogniskowa"));
+                
         JFrame f = new JFrame("Kamera");
         f.add(tools, BorderLayout.EAST);
         f.add(new Obiektyw());
@@ -36,11 +40,17 @@ public class Kamera {
         f.setLocationByPlatform(true);
         f.pack();  
         f.setVisible(true);
-        //f.setResizable(false);
+        f.setResizable(false);
     }       
     
     public class Obiektyw extends JPanel {
 
+    	public Obiektyw() {
+    		super();
+    		setMinimumSize(new Dimension(450, 300));
+    		setPreferredSize(new Dimension(450, 300));
+    	}
+    	
 	    private void przerysuj(Graphics g) {
 
 	        Graphics2D g2d = (Graphics2D) g;
@@ -60,7 +70,7 @@ public class Kamera {
 	    public void paintComponent(Graphics g) {
 
 	        super.paintComponent(g);
-	        setBackground(Color.RED);
+	        setBackground(Color.LIGHT_GRAY);	        
 	        przerysuj(g);
 	    }
 	}
@@ -74,7 +84,7 @@ public class Kamera {
 	    
 	    public Przycisk(String nazwa) {
 	    	super();
-	    	init("nazwa");
+	    	init(nazwa);
 	    }
 	    
 	    private void init(String nazwa) {
@@ -86,6 +96,48 @@ public class Kamera {
 	        add(label);
 	        add(js);
 	        setMaximumSize(getPreferredSize());
+	    }
+	    
+	    public int getValue() {
+	    	return 10;
+	    }
+	}
+    
+    public class Przycisk3D extends JPanel {
+
+	    public Przycisk3D() {
+	    	super();
+	    	init("");
+	    }
+	    
+	    public Przycisk3D(String nazwa) {
+	    	super();
+	    	init(nazwa);
+	    }
+	    
+	    private void init(String nazwa) {
+	    	setLayout(new FlowLayout());
+	    	setBorder(BorderFactory.createTitledBorder(nazwa));
+	    	   
+	        JSpinner jsX = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1d));
+	        jsX.setEditor(new JSpinner.NumberEditor(jsX, "000"));
+	        
+	        JSpinner jsY = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1d));
+	        jsY.setEditor(new JSpinner.NumberEditor(jsY, "000"));
+	        
+	        JSpinner jsZ = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1d));
+	        jsZ.setEditor(new JSpinner.NumberEditor(jsZ, "000"));
+	        
+	        add(new JLabel("x:"));
+	        add(jsX);
+	        add(new JLabel("y:"));
+	        add(jsY);
+	        add(new JLabel("z:"));
+	        add(jsZ);
+	        
+	        //setSize(getPreferredSize());
+	        //validate();
+	       // setMaximumSize(getPreferredSize());
 	    }
 	    
 	    public int getValue() {
