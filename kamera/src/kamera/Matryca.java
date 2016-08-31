@@ -9,12 +9,12 @@ import narzedzia.Punkt3D;
 
 public class Matryca {
 
-    private ArrayList<Punkt3D> matryca;
+    private ArrayList<Punkt3D> przestrzen;
     private Parametr3D H, S, R, T;
     private Integer D;
 
     public Matryca() {
-        this.matryca = GeneratorPrzestrzeni.dajPrzestrzen();
+        this.przestrzen = GeneratorPrzestrzeni.dajPrzestrzen();
         H = new Parametr3D("Pochylenie");
         S = new Parametr3D("Powiêkszenie");
         R = new Parametr3D("Obrót");
@@ -46,7 +46,7 @@ public class Matryca {
     	ArrayList<Punkt3D> punktyPrzksztalcone = new ArrayList<Punkt3D>();
     	int x, y, z;
     	
-    	for (Punkt3D punkt3D : matryca) {
+    	for (Punkt3D punkt3D : przestrzen) {
     		x = Math.round(punkt3D.x + T.x);
     		y = Math.round(punkt3D.y + T.y);
     		z = Math.round(punkt3D.z + T.z);
