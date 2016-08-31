@@ -2,10 +2,11 @@ package interfejs_uzytkownika;
 
 import java.awt.*;
 import java.io.IOException;
+
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import kamera.Matryca;
+
 import narzedzia.Parametr3D;
 
 public class Kamera extends JFrame {

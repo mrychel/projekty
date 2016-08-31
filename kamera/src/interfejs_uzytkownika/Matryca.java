@@ -1,4 +1,4 @@
-package kamera;
+package interfejs_uzytkownika;
 
 import java.awt.Point;
 import java.util.ArrayList;
