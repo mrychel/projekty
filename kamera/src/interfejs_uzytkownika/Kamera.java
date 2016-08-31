@@ -10,8 +10,8 @@ import narzedzia.Parametr3D;
 
 public class Kamera extends JFrame {
 	
-    private Matryca matryca;
-    private Obiektyw obiektyw;
+    private Matryca matryca = new Matryca();
+    private Obiektyw obiektyw = new Obiektyw();
 	
 	private Kamera() {
     	initializeGui();      
@@ -27,11 +27,8 @@ public class Kamera extends JFrame {
 	}
     
     private final void initializeGui() {
-        
-    	matryca = new Matryca();
-    	obiektyw = new Obiektyw();
-    	    	
-    	JToolBar tools = new JToolBar("dd");
+            	    	
+    	JToolBar tools = new JToolBar();
     	tools.setLayout(new GridLayout(0, 1));
         tools.setFloatable(false);
         tools.add(new Przycisk3D(matryca.dajT()));        
@@ -50,7 +47,7 @@ public class Kamera extends JFrame {
         f.setResizable(false);        
     }  
         
-    public class Obiektyw extends JPanel {
+    private class Obiektyw extends JPanel {
 
     	public Obiektyw() {
     		super();
@@ -88,15 +85,10 @@ public class Kamera extends JFrame {
 	    }
 	}
     
-    public class Przycisk extends JPanel {
+    private class Przycisk extends JPanel {
 
     	private Integer parametr;
-    	
-	    public Przycisk() {
-	    	super();
-	    	init("");
-	    }
-	    
+    	   
 	    public Przycisk(String nazwa, Integer parametr) {
 	    	super();
 	    	this.parametr = parametr;
@@ -121,22 +113,13 @@ public class Kamera extends JFrame {
 	        add(label);
 	        add(js);
 	        setMaximumSize(getPreferredSize());
-	    }
-	    
-	    public int getValue() {
-	    	return 10;
-	    }
+	    }	    
 	}
     
-    public class Przycisk3D extends JPanel {
+    private class Przycisk3D extends JPanel {
 
 	    private Parametr3D parametr;
     	
-    	public Przycisk3D() {
-	    	super();
-	    	init("");
-	    }
-	    
 	    public Przycisk3D(Parametr3D parametr) {
 	    	super();
 	    	this.parametr = parametr;
