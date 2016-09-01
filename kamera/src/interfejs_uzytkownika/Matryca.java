@@ -42,31 +42,44 @@ public class Matryca {
     	return D;
     }
     
+    private Punkt3D przeksztalc3D(Punkt3D punkt3D) {    	
+    	int x = Math.round(punkt3D.x + T.x);
+		int y = Math.round(punkt3D.y + T.y);
+		int z = Math.round(punkt3D.z + T.z);
+    	return new Punkt3D(x, y, z);
+    }
+    
+    private Point przeksztalc2D(Punkt3D punkt3D) {    	   	
+    	float W = 1 + punkt3D.z/D.floatValue();
+		int x = Math.round(punkt3D.x/W);
+		int y = Math.round(punkt3D.y/W);
+		return new Point(x, y);
+    }
+    
     public ArrayList<Punkt3D> dajPunktyPrzeksztalcone() {
     	ArrayList<Punkt3D> punktyPrzksztalcone = new ArrayList<Punkt3D>();
-    	int x, y, z;
     	
-    	for (Punkt3D punkt3D : przestrzen) {
-    		x = Math.round(punkt3D.x + T.x);
-    		y = Math.round(punkt3D.y + T.y);
-    		z = Math.round(punkt3D.z + T.z);
-    		punktyPrzksztalcone.add(new Punkt3D(x, y, z));
-    	}
+    	for (Punkt3D punkt3D : przestrzen) 
+    		punktyPrzksztalcone.add(przeksztalc3D(punkt3D));
+    	
 		return punktyPrzksztalcone;
     }
     
     public ArrayList<Point> dajPunkty2D() {
     	ArrayList<Point> punkty = new ArrayList<Point>();
-    	int x, y;
-    	float W;
     	
-    	for (Punkt3D punkt3D : dajPunktyPrzeksztalcone()) {
-    		W = 1 + punkt3D.z/D.floatValue();
-    		x = Math.round(punkt3D.x/W);
-    		y = Math.round(punkt3D.y/W);
-    		punkty.add(new Point(x, y));
-    	}
+    	for (Punkt3D punkt3D : dajPunktyPrzeksztalcone())
+    		punkty.add(przeksztalc2D(punkt3D));
+    	
     	return punkty;
+    }
+    
+    public Point dajPunkt2D(Punkt3D punkt3D) {
+    	return przeksztalc2D(punkt3D);
+    }
+    
+    public void dodajPunkt3D(Punkt3D punkt) {
+    	przestrzen.add(punkt);
     }
     
     public static double[][] multiply(double a[][], double b[][]) {
