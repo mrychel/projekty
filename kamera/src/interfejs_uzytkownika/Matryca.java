@@ -3,19 +3,17 @@ package interfejs_uzytkownika;
 import java.awt.Point;
 import java.util.ArrayList;
 
-import narzedzia.GeneratorPrzestrzeni;
 import narzedzia.Parametr3D;
+import narzedzia.Plaszczyzny;
 import narzedzia.Punkt3D;
 
-public class Matryca {
-
-    private ArrayList<Punkt3D> przestrzen;
+public class Matryca extends Plaszczyzny {
+   
     private Parametr3D H, S, R, T;
     private Integer D;
 
     public Matryca() {
-        this.przestrzen = GeneratorPrzestrzeni.dajPrzestrzen();
-        H = new Parametr3D("Pochylenie");
+    	H = new Parametr3D("Pochylenie");
         S = new Parametr3D("Powiêkszenie");
         R = new Parametr3D("Obrót");
         T = new Parametr3D("Przesuniêcie");

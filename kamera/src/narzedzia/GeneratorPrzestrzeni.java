@@ -1,60 +1,43 @@
 package narzedzia;
 
-import java.util.ArrayList;
-
 public class GeneratorPrzestrzeni {
 	
+	Punkt3D poczatek, wymiary;
+		
 	public GeneratorPrzestrzeni() {
-		
+		Plaszczyzny pp = new Plaszczyzny();
+		dajPrzestrzen(pp, new Punkt3D(50, 50, 60), new Punkt3D(250, 350, 460));
 	}
 	
-	public static ArrayList<Punkt3D> dajPrzestrzen() {
-		ArrayList<Punkt3D> punktyPrzestrzeni = new ArrayList<Punkt3D>();
-		punktyPrzestrzeni.add(new Punkt3D(10, 20, 600));
-		punktyPrzestrzeni.add(new Punkt3D(300, 200, 600));
-		punktyPrzestrzeni.add(new Punkt3D(10, 30, 30));
-		punktyPrzestrzeni.add(new Punkt3D(300, 300, 30));
+	public void dajPrzestrzen(Plaszczyzny pl, Punkt3D poczatek, Punkt3D wymiar) {
 		
-		return punktyPrzestrzeni;
-	}
-	/*
-	public class Linia {
-	    Punkt3D pocz, kon;	
-	    
-	    Linia () {}
-	    Linia (int x, int y, int z, int r, int s, int t) {
-	    	pocz.x = x;
-	    	pocz.y = y;
-	    	pocz.z = z;
-	    	kon.x = r;
-	    	kon.y = s;
-	    	kon.z = t;
-	    }
-	}
-
-	public Linia[] P;// {
-		{new Punkt3D(20, 30, 20), new Punkt3D(20, 30, 50)},		
-		{new Punkt3D(20, 30, 20), new Punkt3D(20, 130, 20)},
-		{new Punkt3D(20, 30, 20), new Punkt3D(120, 30, 20)},
-		{new Punkt3D(20, 30, 50), new Punkt3D(20, 130, 50)},		
-		{new Punkt3D(20, 30, 50), new Punkt3D(120, 30, 50)},
+		for (int i = 0; i<8; i++) {			
+			pl.przestrzen.add(new Punkt3D(poczatek.x+( i%1==0 ? wymiar.x : 0),
+										  poczatek.y+( i%2==0 ? wymiar.y : 0),
+										  poczatek.z+( i%4==0 ? wymiar.z : 0)));
+		}
+		int m = pl.przestrzen.size();
+		System.out.println(pl.przestrzen.get(m-1));
+		System.out.println(pl.przestrzen.get(m));
+		pl.odcinki.add(new Odcinek(m-1, m-2));
+		pl.odcinki.add(new Odcinek(m-2, m-3));
+		pl.odcinki.add(new Odcinek(m-3, m-4));
+		pl.odcinki.add(new Odcinek(m-4, m-1));
 		
-		{new Punkt3D(20, 130, 20), new Punkt3D(20, 130, 50)},
-		{new Punkt3D(20, 130, 20), new Punkt3D(120, 130, 20)},
-		{new Punkt3D(20, 130, 50), new Punkt3D(120, 130, 50)},
+		//pl.plaszczyzny.add(null);
+		/*
+		Punkt3D p1 = new Punkt3D(poczatek.x, poczatek.y, poczatek.z);
+		pl.przestrzen.add(p1);
+		int i_p1 = pl.przestrzen.indexOf(p1);
 		
-		{new Punkt3D(120, 30, 20), new Punkt3D(120, 30, 50)},			
-		{new Punkt3D(120, 30, 20), new Punkt3D(120, 130, 20)},
-		{new Punkt3D(120, 30, 50), new Punkt3D(120, 130, 50)},
+		Punkt3D p2 = new Punkt3D(poczatek.x+wymiar.x, poczatek.y, poczatek.z);
+		pl.przestrzen.add(p2);
+		int i_p2 = pl.przestrzen.indexOf(p2);
 		
-		{new Punkt3D(120, 130, 20), new Punkt3D(120, 130, 50)}
-	};	
-	
-	public Przestrzen() { 
-	   
-	    for (int i=0; i<12; i=i+12) {
-			P[i] = new Linia();
-		    P[i+1] = new Linia();
-	    }
-   }*/
+		Punkt3D p3 = new Punkt3D(poczatek.x+wymiar.x, poczatek.y+wymiar.y, poczatek.z);
+		pl.przestrzen.add(p3);
+		int i_p3 = pl.przestrzen.indexOf(p3);*/
+		
+		
+	}	
 }
