@@ -3,6 +3,8 @@ package interfejs_uzytkownika;
 import java.awt.Point;
 import java.util.ArrayList;
 
+import narzedzia.GeneratorPrzestrzeni;
+import narzedzia.Odcinek;
 import narzedzia.Parametr3D;
 import narzedzia.Plaszczyzny;
 import narzedzia.Punkt3D;
@@ -12,7 +14,8 @@ public class Matryca extends Plaszczyzny{
     private Parametr3D H, S, R, T;
     private Integer D;
 
-    public Matryca() {       
+    public Matryca() {   
+    	new GeneratorPrzestrzeni(this);
         H = new Parametr3D("Pochylenie");
         S = new Parametr3D("Powiêkszenie");
         R = new Parametr3D("Obrót");
@@ -20,6 +23,11 @@ public class Matryca extends Plaszczyzny{
         D = new Integer(10);
     }
 
+    public void tst() {
+    	for (Punkt3D h : punkty)
+    		System.out.println(h.x+" "+h.y+" "+h.z);
+    }
+    
     public Parametr3D dajH() {
     	return H;
     }
@@ -40,6 +48,10 @@ public class Matryca extends Plaszczyzny{
     	return D;
     }
     
+    public void ustawD(Integer d) {
+    	this.D = d;
+    }
+    
     private Punkt3D przeksztalc3D(Punkt3D punkt3D) {    	
     	int x = Math.round(punkt3D.x + T.x);
 		int y = Math.round(punkt3D.y + T.y);
@@ -48,7 +60,7 @@ public class Matryca extends Plaszczyzny{
     }
     
     private Point przeksztalc2D(Punkt3D punkt3D) {    	   	
-    	float W = 1 + punkt3D.z/D.floatValue();
+    	float W = 1 + punkt3D.z/D.floatValue(); System.out.println("d: "+D);
 		int x = Math.round(punkt3D.x/W);
 		int y = Math.round(punkt3D.y/W);
 		return new Point(x, y);
@@ -57,7 +69,7 @@ public class Matryca extends Plaszczyzny{
     public ArrayList<Punkt3D> dajPunktyPrzeksztalcone() {
     	ArrayList<Punkt3D> punktyPrzksztalcone = new ArrayList<Punkt3D>();
     	
-    	for (Punkt3D punkt3D : przestrzen) 
+    	for (Punkt3D punkt3D : punkty) 
     		punktyPrzksztalcone.add(przeksztalc3D(punkt3D));
     	
 		return punktyPrzksztalcone;
@@ -76,8 +88,15 @@ public class Matryca extends Plaszczyzny{
     	return przeksztalc2D(punkt3D);
     }
     
-    public void dodajPunkt3D(Punkt3D punkt) {
-    	przestrzen.add(punkt);
+    public ArrayList<Point> dajLinie2D() {
+    	ArrayList<Point> linie = new ArrayList<Point>();
+    	
+    	for (Odcinek odcinek : odcinki) {
+    		linie.add(przeksztalc2D(przeksztalc3D(punkty.get(odcinek.a))));
+    		linie.add(przeksztalc2D(przeksztalc3D(punkty.get(odcinek.b))));
+    	}
+    	
+    	return linie;
     }
     
     public static double[][] multiply(double a[][], double b[][]) {

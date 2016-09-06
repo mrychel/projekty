@@ -2,6 +2,7 @@ package interfejs_uzytkownika;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -66,10 +67,13 @@ public class Kamera extends JFrame {
 	        //Przeksztalcenia pr = new Przeksztalcenia();
             //for (Punkt3D[] a : p.P){
 	        //g2d.drawLine(pr.na3D(a[0]).x, pr.na3D(a[0]).y, pr.na3D(a[1]).x, pr.na3D(a[1]).y);
-	        for (Point punkt : matryca.dajPunkty2D()) {
 	        g2d.setColor(Color.RED);
-	        	g2d.drawLine(punkt.x, punkt.y, punkt.x, punkt.y);
-	        System.out.println(punkt.x+" "+punkt.y);
+	        //for (Point punkt : matryca.dajLinie2D()) {
+	        ArrayList<Point> kk = matryca.dajLinie2D();
+	        for (int i = 0; i<kk.size(); i=i+2) {
+	        
+	        	g2d.drawLine(kk.get(i).x, kk.get(i).y, kk.get(i+1).x, kk.get(i+1).y);
+	        //System.out.println(punkt.x+" "+punkt.y);
 	        }
             
             //System.out.println(pr.na3D(a[0]).x +" "+ pr.na3D(a[0]).y +" "+ pr.na3D(a[1]).x +" "+ pr.na3D(a[1]).y);
@@ -106,7 +110,7 @@ public class Kamera extends JFrame {
 				
 				@Override
 				public void stateChanged(ChangeEvent e) {
-					parametr = ((Double)((JSpinner) e.getSource()).getValue()).intValue();
+					matryca.ustawD(((Double)((JSpinner) e.getSource()).getValue()).intValue());
 					obiektyw.repaint();
 				}
 			});
