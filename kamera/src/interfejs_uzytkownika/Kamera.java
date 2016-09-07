@@ -15,7 +15,8 @@ import narzedzia.Parametr3D;
 //http://eduinf.waw.pl/inf/utils/002_roz/2008_07.php
 //http://www.asawicki.info/productions/artykuly/Zaawansowana_kamera_3D.php5
 // przerobica Matryce na Algorytmy i tam wydzielic algorytmy.
-
+// potem przerobiæ ¿eby zwracal liste parametrow 3d i 2d oraz liste odcinkow/scian
+// w instrukcji opisac te listy oraz dziedziczenie narzedzi.
 //https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
 //http://homepages.inf.ed.ac.uk/rbf/CVonline/LOCAL_COPIES/AV0405/REDSTONE/AxisAngleRotation.html
 public class Kamera extends JFrame {
