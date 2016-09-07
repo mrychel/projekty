@@ -2,11 +2,11 @@ package narzedzia;
 
 public class Parametr3D {
 	
-	public float x,y,z;
-	private String nazwa = "";
+	public float x,y,z;	
 	public double sinx, siny, sinz,
 				   cosx, cosy, cosz,
 				   jedenMinusCosx, jedenMinusCosy, jedenMinusCosz;
+	private String nazwa = "";
 	private boolean czyPrzeliczacFunkcjeTryg = false;
 	
 	/*
