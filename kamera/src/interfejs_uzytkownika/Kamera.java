@@ -14,6 +14,10 @@ import narzedzia.Parametr3D;
 //http://mst.mimuw.edu.pl/lecture.php?lecture=gk1&part=Ch3
 //http://eduinf.waw.pl/inf/utils/002_roz/2008_07.php
 //http://www.asawicki.info/productions/artykuly/Zaawansowana_kamera_3D.php5
+// przerobica Matryce na Algorytmy i tam wydzielic algorytmy.
+
+//https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
+//http://homepages.inf.ed.ac.uk/rbf/CVonline/LOCAL_COPIES/AV0405/REDSTONE/AxisAngleRotation.html
 public class Kamera extends JFrame {
 	
     private Matryca matryca = new Matryca();
@@ -57,8 +61,8 @@ public class Kamera extends JFrame {
 
     	public Obiektyw() {
     		super();
-    		setMinimumSize(new Dimension(450, 300));
-    		setPreferredSize(new Dimension(450, 300));    		
+    		setMinimumSize(new Dimension(matryca.OBSZAR_RYSOWANIA_X, matryca.OBSZAR_RYSOWANIA_Y));
+    		setPreferredSize(new Dimension(matryca.OBSZAR_RYSOWANIA_X, matryca.OBSZAR_RYSOWANIA_Y));    		
     	}
     	
 	    private void przerysuj(Graphics g) {
@@ -127,8 +131,12 @@ public class Kamera extends JFrame {
 	    	setLayout(new FlowLayout());
 	    	setBorder(BorderFactory.createTitledBorder(nazwa));	    	
 	    	
-	        JSpinner jsX = new JSpinner(new SpinnerNumberModel(0, -999, 999, 10d));
-	        jsX.setEditor(new JSpinner.NumberEditor(jsX, "000"));
+	        JSpinner jsX = new JSpinner(new SpinnerNumberModel(
+	        									parametr.wPoczatkowa,
+	        									parametr.wMinimalna,
+	        									parametr.wMaksymalna,
+	        									parametr.wSkoku));
+	        jsX.setEditor(new JSpinner.NumberEditor(jsX, "000.0"));
 	        jsX.addChangeListener(new ChangeListener() {
 				
 				@Override
@@ -139,8 +147,12 @@ public class Kamera extends JFrame {
 				}
 			});
 	        
-	        JSpinner jsY = new JSpinner(new SpinnerNumberModel(0, -999, 999, 10d));
-	        jsY.setEditor(new JSpinner.NumberEditor(jsY, "000"));
+	        JSpinner jsY = new JSpinner(new SpinnerNumberModel(
+								        		parametr.wPoczatkowa,
+												parametr.wMinimalna,
+												parametr.wMaksymalna,
+												parametr.wSkoku));
+	        jsY.setEditor(new JSpinner.NumberEditor(jsY, "000.0"));
 	        jsY.addChangeListener(new ChangeListener() {
 				
 				@Override
@@ -151,8 +163,12 @@ public class Kamera extends JFrame {
 				}
 			});
 	        
-	        JSpinner jsZ = new JSpinner(new SpinnerNumberModel(0, -999, 999, 10d));
-	        jsZ.setEditor(new JSpinner.NumberEditor(jsZ, "000"));
+	        JSpinner jsZ = new JSpinner(new SpinnerNumberModel(
+								        		parametr.wPoczatkowa,
+												parametr.wMinimalna,
+												parametr.wMaksymalna,
+												parametr.wSkoku));
+	        jsZ.setEditor(new JSpinner.NumberEditor(jsZ, "000.0"));
 	        jsZ.addChangeListener(new ChangeListener() {
 				
 				@Override

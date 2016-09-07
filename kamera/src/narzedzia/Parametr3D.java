@@ -2,36 +2,33 @@ package narzedzia;
 
 public class Parametr3D {
 	
-	public float x,y,z;	
+	public double x,y,z;	
 	public double sinx, siny, sinz,
-				   cosx, cosy, cosz,
-				   jedenMinusCosx, jedenMinusCosy, jedenMinusCosz;
+				  cosx, cosy, cosz,
+				  jedenMinusCosx, jedenMinusCosy, jedenMinusCosz;
+	public double wPoczatkowa = 0,
+			      wMinimalna  = -999,
+			      wMaksymalna = 999,
+			      wSkoku = 10d;
 	private String nazwa = "";
 	private boolean czyPrzeliczacFunkcjeTryg = false;
-	
-	/*
-	public Parametr3D() {		
-	}
-	*/
+		
 	public Parametr3D(String nazwa) {
 		this.nazwa = nazwa;
 	}
-	/*
-	public Parametr3D(String nazwa, float x, float y, float z) {
-		this.nazwa = nazwa;
-		this.x=x;
-		this.y=y;
-		this.z=z;
-	}
 	
-	public void ustaw(Parametr3D parametry) {
-    	this.x = parametry.x;
-    	this.y = parametry.y;
-    	this.z = parametry.z;
-    }
-	*/
 	public String dajNazwe() {
 		return this.nazwa;
+	}
+	
+	public void ustawWartosci(double wPoczatkowa, double wMinimalna, double wMaksymalna, double wSkoku) {
+		this.wPoczatkowa = wPoczatkowa;
+		this.wMinimalna = wMinimalna;
+		this.wMaksymalna = wMaksymalna;
+		this.wSkoku = wSkoku;
+		this.x = (float)wPoczatkowa;
+		this.y = (float)wPoczatkowa;
+		this.z = (float)wPoczatkowa;
 	}
 	
 	public void przeliczFunkcjeTryg() {
@@ -52,5 +49,6 @@ public class Parametr3D {
 	
 	public void ustawPrzeliczanieFunkcjiTryg(boolean czyPrzeliczacFunkcjeTryg) {
 		this.czyPrzeliczacFunkcjeTryg = czyPrzeliczacFunkcjeTryg;
+		przeliczFunkcjeTryg();
 	}
 }
