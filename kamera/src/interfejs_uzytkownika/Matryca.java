@@ -19,6 +19,7 @@ public class Matryca extends Plaszczyzny{
         H = new Parametr3D("Pochylenie");
         S = new Parametr3D("Powiêkszenie");
         R = new Parametr3D("Obrót");
+        R.ustawPrzeliczanieFunkcjiTryg(true);
         T = new Parametr3D("Przesuniêcie");
         D = new Integer(10);
     }
@@ -54,32 +55,28 @@ public class Matryca extends Plaszczyzny{
     
     private Parametr3D obroc3D(Punkt3D p) {
     	
-    	double x, y, z;
-    	
-    	double sinx = Math.sin(R.x);
-    	double cosx = Math.cos(R.x);
-    	double one_cosx = 1 - cosx;
-    	
-    	double sinz = Math.sin(R.z);
-    	double cosz = Math.cos(R.z);
-    	double one_cosz = 1 - cosz;
-    	
-    	x = p.x*cosz + p.y*sinz;
-    	y = p.y*cosz - p.x*sinz;
-    	z = p.z*cosz + p.z*one_cosz;
+    	double x = p.x, 
+    		   y = p.y, 
+    		   z = p.z;
+    	    	
+    	x = x*R.cosz + y*R.sinz;
+    	y = y*R.cosz - x*R.sinz;
+    	z = z*R.cosz + z*R.jedenMinusCosz;
     	
     	Parametr3D h = new Parametr3D("");
-    	h.x = (float)x;
-    	h.y = (float)y;
-    	h.z = (float)z;
+    	h.x = (float)x * S.x;
+    	h.y = (float)y * S.y;
+    	h.z = (float)z * S.z;
     	return h;
     }
     
     private Punkt3D przeksztalc3D(Punkt3D punkt3D) {    	
     	
-    	int x = Math.round(punkt3D.x + T.x);
-		int y = Math.round(punkt3D.y + T.y);
-		int z = Math.round(punkt3D.z + T.z);
+    	Parametr3D bb = obroc3D(punkt3D);
+    	
+    	int x = Math.round(bb.x + T.x);
+		int y = Math.round(bb.y + T.y);
+		int z = Math.round(bb.z + T.z);
     	return new Punkt3D(x, y, z);
     }
     

@@ -10,6 +10,10 @@ import javax.swing.event.ChangeListener;
 
 import narzedzia.Parametr3D;
 
+
+//http://mst.mimuw.edu.pl/lecture.php?lecture=gk1&part=Ch3
+//http://eduinf.waw.pl/inf/utils/002_roz/2008_07.php
+//http://www.asawicki.info/productions/artykuly/Zaawansowana_kamera_3D.php5
 public class Kamera extends JFrame {
 	
     private Matryca matryca = new Matryca();
@@ -130,6 +134,7 @@ public class Kamera extends JFrame {
 				@Override
 				public void stateChanged(ChangeEvent e) {
 					parametr.x = ((Double)((JSpinner) e.getSource()).getValue()).floatValue();
+					parametr.przeliczFunkcjeTryg();
 					obiektyw.repaint();
 				}
 			});
@@ -141,6 +146,7 @@ public class Kamera extends JFrame {
 				@Override
 				public void stateChanged(ChangeEvent e) {
 					parametr.y = ((Double)((JSpinner) e.getSource()).getValue()).floatValue();
+					parametr.przeliczFunkcjeTryg();
 					obiektyw.repaint();
 				}
 			});
@@ -151,7 +157,8 @@ public class Kamera extends JFrame {
 				
 				@Override
 				public void stateChanged(ChangeEvent e) {
-					parametr.z = ((Double)((JSpinner) e.getSource()).getValue()).floatValue();	
+					parametr.z = ((Double)((JSpinner) e.getSource()).getValue()).floatValue();
+					parametr.przeliczFunkcjeTryg();
 					obiektyw.repaint();
 				}
 			});
