@@ -60,27 +60,15 @@ public class Kamera extends JFrame {
 	    private void przerysuj(Graphics g) {
 
 	        Graphics2D g2d = (Graphics2D) g;
-	       
-            //Przestrzen p = new Przestrzen();
-	        //System.out.println(p.P[0][1].x);
-	        //System.out.println(p.P[0][0].y);
-	        //Przeksztalcenia pr = new Przeksztalcenia();
-            //for (Punkt3D[] a : p.P){
-	        //g2d.drawLine(pr.na3D(a[0]).x, pr.na3D(a[0]).y, pr.na3D(a[1]).x, pr.na3D(a[1]).y);
-	        g2d.setColor(Color.RED);
-	        //for (Point punkt : matryca.dajLinie2D()) {
+	                   
+	        g2d.setColor(Color.RED);	        
 	        ArrayList<Point> kk = matryca.dajLinie2D();
 	        for (int i = 0; i<kk.size(); i=i+2) {
 	        
 	        	g2d.drawLine(kk.get(i).x, kk.get(i).y, kk.get(i+1).x, kk.get(i+1).y);
-	        //System.out.println(punkt.x+" "+punkt.y);
+	       
 	        }
-            
-            //System.out.println(pr.na3D(a[0]).x +" "+ pr.na3D(a[0]).y +" "+ pr.na3D(a[1]).x +" "+ pr.na3D(a[1]).y);
-            //}
-	        
 	    }
-	    
 
 	    public void paintComponent(Graphics g) {
 
@@ -104,7 +92,7 @@ public class Kamera extends JFrame {
 	    	setLayout(new FlowLayout(FlowLayout.TRAILING));
 	    	
 	        JLabel label = new JLabel(nazwa, JLabel.TRAILING);
-	        JSpinner js = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1d));
+	        JSpinner js = new JSpinner(new SpinnerNumberModel(10, 0, 100, 1d));
 	        js.setEditor(new JSpinner.NumberEditor(js, "000"));
 	        js.addChangeListener(new ChangeListener() {
 				
@@ -135,7 +123,7 @@ public class Kamera extends JFrame {
 	    	setLayout(new FlowLayout());
 	    	setBorder(BorderFactory.createTitledBorder(nazwa));	    	
 	    	
-	        JSpinner jsX = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1d));
+	        JSpinner jsX = new JSpinner(new SpinnerNumberModel(0, -999, 999, 10d));
 	        jsX.setEditor(new JSpinner.NumberEditor(jsX, "000"));
 	        jsX.addChangeListener(new ChangeListener() {
 				
@@ -146,7 +134,7 @@ public class Kamera extends JFrame {
 				}
 			});
 	        
-	        JSpinner jsY = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1d));
+	        JSpinner jsY = new JSpinner(new SpinnerNumberModel(0, -999, 999, 10d));
 	        jsY.setEditor(new JSpinner.NumberEditor(jsY, "000"));
 	        jsY.addChangeListener(new ChangeListener() {
 				
@@ -157,7 +145,7 @@ public class Kamera extends JFrame {
 				}
 			});
 	        
-	        JSpinner jsZ = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1d));
+	        JSpinner jsZ = new JSpinner(new SpinnerNumberModel(0, -999, 999, 10d));
 	        jsZ.setEditor(new JSpinner.NumberEditor(jsZ, "000"));
 	        jsZ.addChangeListener(new ChangeListener() {
 				

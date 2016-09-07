@@ -52,7 +52,31 @@ public class Matryca extends Plaszczyzny{
     	this.D = d;
     }
     
+    private Parametr3D obroc3D(Punkt3D p) {
+    	
+    	double x, y, z;
+    	
+    	double sinx = Math.sin(R.x);
+    	double cosx = Math.cos(R.x);
+    	double one_cosx = 1 - cosx;
+    	
+    	double sinz = Math.sin(R.z);
+    	double cosz = Math.cos(R.z);
+    	double one_cosz = 1 - cosz;
+    	
+    	x = p.x*cosz + p.y*sinz;
+    	y = p.y*cosz - p.x*sinz;
+    	z = p.z*cosz + p.z*one_cosz;
+    	
+    	Parametr3D h = new Parametr3D("");
+    	h.x = (float)x;
+    	h.y = (float)y;
+    	h.z = (float)z;
+    	return h;
+    }
+    
     private Punkt3D przeksztalc3D(Punkt3D punkt3D) {    	
+    	
     	int x = Math.round(punkt3D.x + T.x);
 		int y = Math.round(punkt3D.y + T.y);
 		int z = Math.round(punkt3D.z + T.z);
@@ -60,12 +84,12 @@ public class Matryca extends Plaszczyzny{
     }
     
     private Point przeksztalc2D(Punkt3D punkt3D) {    	   	
-    	float W = 1 + punkt3D.z/D.floatValue(); System.out.println("d: "+D);
-		int x = Math.round(punkt3D.x/W);
-		int y = Math.round(punkt3D.y/W);
+    	float W = 1 + punkt3D.z/D.floatValue();
+		int x = Math.round(punkt3D.x/W)+150;
+		int y = Math.round(punkt3D.y/W)+225;
 		return new Point(x, y);
     }
-    
+    /*
     public ArrayList<Punkt3D> dajPunktyPrzeksztalcone() {
     	ArrayList<Punkt3D> punktyPrzksztalcone = new ArrayList<Punkt3D>();
     	
@@ -87,7 +111,7 @@ public class Matryca extends Plaszczyzny{
     public Point dajPunkt2D(Punkt3D punkt3D) {
     	return przeksztalc2D(punkt3D);
     }
-    
+    */
     public ArrayList<Point> dajLinie2D() {
     	ArrayList<Point> linie = new ArrayList<Point>();
     	
@@ -98,7 +122,7 @@ public class Matryca extends Plaszczyzny{
     	
     	return linie;
     }
-    
+    /*
     public static double[][] multiply(double a[][], double b[][]) {
 
         int aRows = a.length,
@@ -121,5 +145,5 @@ public class Matryca extends Plaszczyzny{
         }
 
         return resultant;
-    }
+    }*/
 }
