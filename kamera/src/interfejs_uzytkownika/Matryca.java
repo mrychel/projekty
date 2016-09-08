@@ -1,6 +1,7 @@
 package interfejs_uzytkownika;
 
 import java.awt.Point;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import narzedzia.GeneratorPrzestrzeni;
@@ -11,8 +12,11 @@ import narzedzia.Punkt3D;
 
 public class Matryca extends Plaszczyzny{
 
-    public static final int OBSZAR_RYSOWANIA_X = 450;
+	public static final int POCZATEK_OBSZARU_RYSOWANIA_X = 0;
+	public static final int POCZATEK_OBSZARU_RYSOWANIA_Y = 0;
+	public static final int OBSZAR_RYSOWANIA_X = 450;
     public static final int OBSZAR_RYSOWANIA_Y = 300;
+    
     private static final int BIT_0 = 1, BIT_1 = 2, BIT_2 = 4, BIT_3 = 8;
 	private Parametr3D H, S, R, T;
     private Integer D;
@@ -76,10 +80,10 @@ public class Matryca extends Plaszczyzny{
     	double x = punkt3D.x, 
      		   y = punkt3D.y, 
      		   z = punkt3D.z;
-     	    	
-     	x = x*R.cosz + y*R.sinz;
-     	y = y*R.cosz - x*R.sinz;
-     	z = z*R.cosz + z*R.jedenMinusCosz;
+     	  	
+     	x = x*R.mo[0][0]+y*R.mo[0][1]+z*R.mo[0][2];
+     	y = x*R.mo[1][0]+y*R.mo[1][1]+z*R.mo[1][2];
+     	z = x*R.mo[2][0]+y*R.mo[2][1]+z*R.mo[2][2];
      	
      	p.x = x * S.x + T.x;
      	p.y = y * S.y + T.y;
@@ -115,20 +119,20 @@ public class Matryca extends Plaszczyzny{
     	    if ((kod | bit) == 0) 
     	    	switch (bit) {
     	    		case BIT_3 :
-    	    			a.x = 0;
-    	    			a.y = 1;
+    	    			a.x = a.x+(a.x-b.x)*(a.y-POCZATEK_OBSZARU_RYSOWANIA_Y-OBSZAR_RYSOWANIA_Y+1)/(b.y-a.y);
+    	    			a.y = POCZATEK_OBSZARU_RYSOWANIA_Y+OBSZAR_RYSOWANIA_Y-1;
     	    			return a;
     	    		case BIT_2 :
-    	    			a.x = 0;
-    	    			a.y = 1;
+    	    			a.x = a.x+(a.x-b.x)*(a.y-POCZATEK_OBSZARU_RYSOWANIA_Y)/(b.y-a.y);
+    	    			a.y = POCZATEK_OBSZARU_RYSOWANIA_Y;
     	    			return a;
     	    		case BIT_1 :
-    	    			a.x = 0;
-    	    			a.y = 1;
+    	    			a.x = POCZATEK_OBSZARU_RYSOWANIA_X+OBSZAR_RYSOWANIA_X-1;
+    	    			a.y = a.y+(b.y-a.y)*(a.x-POCZATEK_OBSZARU_RYSOWANIA_X-OBSZAR_RYSOWANIA_X+1)/(a.x-b.x);
     	    			return a;
     	    		case BIT_0 :
-    	    			a.x = 0;
-    	    			a.y = 1;
+    	    			a.x = POCZATEK_OBSZARU_RYSOWANIA_X;
+    	    			a.y = a.y+(b.y-a.y)*(POCZATEK_OBSZARU_RYSOWANIA_X-a.x)/(b.x-a.x);
     	    			return a;
 	    			default:
 	    				return a;
@@ -167,9 +171,14 @@ public class Matryca extends Plaszczyzny{
     
     private ArrayList<Point> przeksztalc2D(Odcinek odcinek) {    	   	
     	
+    	ArrayList<Point> o = new ArrayList<>();
+    	o.add(rzutuj(przeksztalc3D(punkty.get(odcinek.a))));
+    	o.add(rzutuj(przeksztalc3D(punkty.get(odcinek.b))));
+    	return o;
+    	/*
     	return przytnij(
     			   rzutuj(przeksztalc3D(punkty.get(odcinek.a))),
     			   rzutuj(przeksztalc3D(punkty.get(odcinek.b)))
-    		   );    	
+    		   );*/    	
     }    
 }

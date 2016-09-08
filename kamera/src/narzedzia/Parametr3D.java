@@ -2,14 +2,13 @@ package narzedzia;
 
 public class Parametr3D {
 	
-	public double x,y,z;	
-	public double sinx, siny, sinz,
-				  cosx, cosy, cosz,
-				  jedenMinusCosx, jedenMinusCosy, jedenMinusCosz;
+	public double x,y,z;				  
 	public double wPoczatkowa = 0,
 			      wMinimalna  = -999,
 			      wMaksymalna = 999,
 			      wSkoku = 10d;
+	public double[][] mo = new double[3][3];
+	
 	private String nazwa = "";
 	private boolean czyPrzeliczacFunkcjeTryg = false;
 		
@@ -33,17 +32,25 @@ public class Parametr3D {
 	
 	public void przeliczFunkcjeTryg() {
 		if (czyPrzeliczacFunkcjeTryg) {
-			sinx = Math.sin(x);
-			siny = Math.sin(y);
-			sinz = Math.sin(z);
+			double sinx = Math.sin(x);
+			double siny = Math.sin(y);
+			double sinz = Math.sin(z);
 			
-			cosx = Math.cos(x);
-			cosy = Math.cos(y);
-			cosz = Math.cos(z);
+			double cosx = Math.cos(x);
+			double cosy = Math.cos(y);
+			double cosz = Math.cos(z);
+						
+			mo[0][0] = cosy*cosz; 
+			mo[1][0] = (-cosx)*sinz-sinx*siny*cosz;
+			mo[2][0] = sinx*sinz-cosx*siny*cosz;
 			
-			jedenMinusCosx = 1-Math.cos(x);
-			jedenMinusCosy = 1-Math.cos(y);
-			jedenMinusCosz = 1-Math.cos(z);
+			mo[0][1] = cosy*sinz; 
+			mo[1][1] = cosx*cosz-sinx*siny*sinz;
+			mo[2][1] = (-sinx)*cosz-cosx*siny*sinz;
+			
+			mo[0][2] = -siny; 
+			mo[1][2] = sinx*cosy;
+			mo[2][2] = cosx*cosy;			
 		}
 	}
 	

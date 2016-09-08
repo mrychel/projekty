@@ -19,6 +19,8 @@ import narzedzia.Parametr3D;
 // w instrukcji opisac te listy oraz dziedziczenie narzedzi.
 //https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
 //http://homepages.inf.ed.ac.uk/rbf/CVonline/LOCAL_COPIES/AV0405/REDSTONE/AxisAngleRotation.html
+
+//https://en.wikipedia.org/wiki/Rotation_formalisms_in_three_dimensions
 public class Kamera extends JFrame {
 	
     private Matryca matryca = new Matryca();
