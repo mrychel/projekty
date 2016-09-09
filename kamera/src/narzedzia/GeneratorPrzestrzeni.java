@@ -1,10 +1,10 @@
 package narzedzia;
 
-import interfejs_uzytkownika.Matryca;
+import algorytmy.Algorytmy;
 
 public class GeneratorPrzestrzeni {
 			
-	public GeneratorPrzestrzeni(Matryca m) {		
+	public GeneratorPrzestrzeni(Algorytmy m) {		
 		dajPrzestrzen(m, new Punkt3D(0, 0, 0), new Punkt3D(20, 20, 20));		
 		dajPrzestrzen(m, new Punkt3D(980, 0, 0), new Punkt3D(20, 20, 20));
 		dajPrzestrzen(m, new Punkt3D(980, 0, 980), new Punkt3D(20, 20, 20));
@@ -18,7 +18,7 @@ public class GeneratorPrzestrzeni {
 		dajPrzestrzen(m, new Punkt3D(500, 0, 750), new Punkt3D(450, 500, 250));
 	}
 	
-	public void dajPrzestrzen(Matryca pl, Punkt3D poczatek, Punkt3D wymiar) {
+	public void dajPrzestrzen(Algorytmy pl, Punkt3D poczatek, Punkt3D wymiar) {
 		
 		for (int i = 0; i<8; i++) {			
 			pl.punkty.add(new Punkt3D(poczatek.x+( (i&1)==0 ? wymiar.x : 0),

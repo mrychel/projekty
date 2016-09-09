@@ -63,4 +63,18 @@ public class Parametr3D {
 		return czyPrzeliczacFunkcjeTryg;
 	}
 	
+	public void ustawX(double x) {
+		this.x = x;
+		przeliczFunkcjeTryg();
+	}
+	
+	public void ustawY(double y) {
+		this.y = y;
+		przeliczFunkcjeTryg();
+	}
+	
+	public void ustawZ(double z) {
+		this.z = z;
+		przeliczFunkcjeTryg();
+	}
 }
