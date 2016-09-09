@@ -28,6 +28,10 @@ import narzedzia.Parametr3D;
 // b³¹d przy obracaniu, b³¹d przy wchodzeniu do wnêtrza figury.
 //i to takie dziwne co siê pojawia byle gdzie (zbieg linii na œrodek ekranu)
 
+
+//https://en.wikipedia.org/wiki/3D_projection
+//http://www.procto.biz/software-technology/courseware-for-hidden-linesurface-removal
+//http://www.mat.uniroma2.it/~picard/SMC/didattica/materiali_did/Java/Java_3D/Java_3D_Programming.pdf
 public class Kamera extends JFrame {
 	
     private Algorytmy matryca = new Algorytmy();
@@ -48,20 +52,17 @@ public class Kamera extends JFrame {
     
     private final void initializeGui() {
             	    	
-    	JToolBar tools = new JToolBar();
-    	tools.setLayout(new GridLayout(0, 1));
-        tools.setFloatable(false);
+    	JToolBar menu = new JToolBar();
+    	menu.setLayout(new GridLayout(0, 1));
+        menu.setFloatable(false);
+        
         for (Parametr3D par : matryca.dajParametry3D())
-        	tools.add(new Przycisk3D(par));        
-        /*
-        	tools.add(new Przycisk3D(matryca.dajR()));
-        tools.add(new Przycisk3D(matryca.dajS()));
-        tools.add(new Przycisk3D(matryca.dajH()));*/
+        	menu.add(new Przycisk3D(par));    
         for (Integer par : matryca.dajParametry())
-        	tools.add(new Przycisk("d:", par));
+        	menu.add(new Przycisk("d:", par));
                        
         JFrame f = new JFrame("Kamera");
-        f.add(tools, BorderLayout.EAST);
+        f.add(menu, BorderLayout.EAST);
         f.add(obiektyw);        
         f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         f.setLocationByPlatform(true);
