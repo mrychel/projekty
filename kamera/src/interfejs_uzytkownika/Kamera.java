@@ -1,15 +1,18 @@
 package interfejs_uzytkownika;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import algorytmy.Algorytmy;
+import narzedzia.Odcinek;
 import narzedzia.Parametr3D;
+import narzedzia.Plaszczyzna;
 
 
 //http://mst.mimuw.edu.pl/lecture.php?lecture=gk1&part=Ch3
@@ -34,8 +37,11 @@ import narzedzia.Parametr3D;
 //http://www.mat.uniroma2.it/~picard/SMC/didattica/materiali_did/Java/Java_3D/Java_3D_Programming.pdf
 public class Kamera extends JFrame {
 	
-    private Algorytmy matryca = new Algorytmy();
+    private Algorytmy algorytmy = new Algorytmy();
     private Obiektyw obiektyw = new Obiektyw();
+    
+    private JCheckBox malowaniePowierzchni = new JCheckBox("Malowanie powierzchni");
+    private JButton ustawDomyslne = new JButton("Reset");
 	
 	private Kamera() {
     	initializeGui();      
@@ -55,12 +61,40 @@ public class Kamera extends JFrame {
     	JToolBar menu = new JToolBar();
     	menu.setLayout(new GridLayout(0, 1));
         menu.setFloatable(false);
+        menu.setPreferredSize(new Dimension(370, algorytmy.OBSZAR_RYSOWANIA_Y));
         
-        for (Parametr3D par : matryca.dajParametry3D())
+        JPanel pnl = new JPanel(new FlowLayout());
+    	pnl.setBorder(BorderFactory.createTitledBorder("Inne"));	
+        
+    	malowaniePowierzchni.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				obiektyw.repaint();
+			}
+		});
+        
+        ustawDomyslne.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for (Component c : menu.getComponents()) 
+		        	if (c instanceof Przycisk3D) ((Przycisk3D) c).ustawDomyslne();
+				for (Component c : pnl.getComponents())
+					if (c instanceof Przycisk) ((Przycisk) c).ustawDomyslne();
+			}
+		});
+        
+        pnl.add(ustawDomyslne);
+        pnl.add(malowaniePowierzchni);
+        
+        for (Parametr3D par : algorytmy.dajParametry3D())
         	menu.add(new Przycisk3D(par));    
-        for (Integer par : matryca.dajParametry())
-        	menu.add(new Przycisk("d:", par));
-                       
+        for (Integer par : algorytmy.dajParametry())
+        	pnl.add(new Przycisk("d:", par));
+        
+        menu.add(pnl);
+        
         JFrame f = new JFrame("Kamera");
         f.add(menu, BorderLayout.EAST);
         f.add(obiektyw);        
@@ -75,21 +109,26 @@ public class Kamera extends JFrame {
 
     	public Obiektyw() {
     		super();
-    		setMinimumSize(new Dimension(matryca.OBSZAR_RYSOWANIA_X, matryca.OBSZAR_RYSOWANIA_Y));
-    		setPreferredSize(new Dimension(matryca.OBSZAR_RYSOWANIA_X, matryca.OBSZAR_RYSOWANIA_Y));    		
+    		setMinimumSize(new Dimension(algorytmy.OBSZAR_RYSOWANIA_X, algorytmy.OBSZAR_RYSOWANIA_Y));
+    		setPreferredSize(new Dimension(algorytmy.OBSZAR_RYSOWANIA_X, algorytmy.OBSZAR_RYSOWANIA_Y));    		
     	}
     	
 	    private void przerysuj(Graphics g) {
 
 	        Graphics2D g2d = (Graphics2D) g;
-	                   
-	        g2d.setColor(Color.RED);	        
-	        ArrayList<Point> kk = matryca.dajLinie2D();
-	        for (int i = 0; i<kk.size(); i=i+2) {
 	        
-	        	g2d.drawLine(kk.get(i).x, kk.get(i).y, kk.get(i+1).x, kk.get(i+1).y);
-	       
-	        }
+	        if (malowaniePowierzchni.isSelected())
+	        	for (Plaszczyzna p : algorytmy.dajPlaszczyzny2D()) {
+		        	g2d.setColor(p.kolor_konturu);
+		        	g2d.drawPolygon(p.rzut);	        	
+		        	g2d.setColor(p.kolor_wypelnienia);	        	
+		            g2d.fillPolygon(p.rzut);
+		        }	
+	        else	
+		        for (Odcinek o : algorytmy.dajLinie2D()) {
+		        	g2d.setColor(o.kolor_konturu);
+		        	g2d.drawLine(o.rzut_a.x, o.rzut_a.y, o.rzut_b.x, o.rzut_b.y);
+		        }
 	    }
 
 	    public void paintComponent(Graphics g) {
@@ -103,6 +142,8 @@ public class Kamera extends JFrame {
     private class Przycisk extends JPanel {
 
     	private Integer parametr;
+    	private JSpinner js;
+    	private final static double wPoczatkowa = -500;
     	   
 	    public Przycisk(String nazwa, Integer parametr) {
 	    	super();
@@ -114,26 +155,30 @@ public class Kamera extends JFrame {
 	    	setLayout(new FlowLayout(FlowLayout.TRAILING));
 	    	
 	        JLabel label = new JLabel(nazwa, JLabel.TRAILING);
-	        JSpinner js = new JSpinner(new SpinnerNumberModel(-500, -1000, 1000, 1d));
+	        js = new JSpinner(new SpinnerNumberModel(wPoczatkowa, -1000, 1000, 1d));
 	        js.setEditor(new JSpinner.NumberEditor(js, "000"));	        	        
 	        js.addChangeListener(new ChangeListener() {
 				
 				@Override
 				public void stateChanged(ChangeEvent e) {					
-					matryca.ustawD(((Double)((JSpinner) e.getSource()).getValue()).intValue());
+					algorytmy.ustawD(((Double)((JSpinner) e.getSource()).getValue()).intValue());
 					obiektyw.repaint();
 				}
 			});
 	        
 	        add(label);
-	        add(js);
-	        setMaximumSize(getPreferredSize());
-	    }	    
+	        add(js); 	        
+	    }	
+	    
+	    public void ustawDomyslne() {
+	        js.setValue(wPoczatkowa);
+	    }
 	}
     
     private class Przycisk3D extends JPanel {
 
 	    private Parametr3D parametr;
+	    private JSpinner jsX, jsY, jsZ;
     	
 	    public Przycisk3D(Parametr3D parametr) {
 	    	super();
@@ -145,7 +190,7 @@ public class Kamera extends JFrame {
 	    	setLayout(new FlowLayout());
 	    	setBorder(BorderFactory.createTitledBorder(nazwa));	    	
 	    	
-	        JSpinner jsX = new JSpinner(new SpinnerNumberModel(
+	        jsX = new JSpinner(new SpinnerNumberModel(
 	        									parametr.wPoczatkowa,
 	        									parametr.wMinimalna,
 	        									parametr.wMaksymalna,
@@ -170,7 +215,7 @@ public class Kamera extends JFrame {
 				}
 			});
 	        
-	        JSpinner jsY = new JSpinner(new SpinnerNumberModel(
+	        jsY = new JSpinner(new SpinnerNumberModel(
 								        		parametr.wPoczatkowa,
 												parametr.wMinimalna,
 												parametr.wMaksymalna,
@@ -195,7 +240,7 @@ public class Kamera extends JFrame {
 				}
 			});
 	        
-	        JSpinner jsZ = new JSpinner(new SpinnerNumberModel(
+	        jsZ = new JSpinner(new SpinnerNumberModel(
 								        		parametr.wPoczatkowa,
 												parametr.wMinimalna,
 												parametr.wMaksymalna,
@@ -226,6 +271,12 @@ public class Kamera extends JFrame {
 	        add(jsY);
 	        add(new JLabel("z:"));
 	        add(jsZ);	        
-	    }	    
+	    }	
+	    
+	    public void ustawDomyslne() {
+	    	jsX.setValue(parametr.wPoczatkowa);
+	    	jsY.setValue(parametr.wPoczatkowa);
+	    	jsZ.setValue(parametr.wPoczatkowa);
+	    }
 	}
 }

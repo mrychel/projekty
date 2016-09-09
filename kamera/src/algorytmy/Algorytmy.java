@@ -2,14 +2,17 @@ package algorytmy;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import narzedzia.GeneratorPrzestrzeni;
 import narzedzia.Odcinek;
+import narzedzia.Odcinki;
 import narzedzia.Parametr3D;
+import narzedzia.Plaszczyzna;
 import narzedzia.Plaszczyzny;
 import narzedzia.Punkt3D;
 
-public class Algorytmy extends Plaszczyzny{
+public class Algorytmy extends Plaszczyzny {
 
 	public static final int POCZATEK_OBSZARU_RYSOWANIA_X = 0;
 	public static final int POCZATEK_OBSZARU_RYSOWANIA_Y = 0;
@@ -60,14 +63,63 @@ public class Algorytmy extends Plaszczyzny{
     	return parametry;
     }    
     
-    public ArrayList<Point> dajLinie2D() {
-    	ArrayList<Point> linie = new ArrayList<Point>();
+    public ArrayList<Odcinek> dajLinie2D() {
+    	
+    	Odcinki linie = new Odcinki();
     	
     	for (Odcinek odcinek : odcinki) 
-    		linie.addAll(przeksztalc2D(odcinek));
-    	    	
-    	return linie;
+    		linie.odcinki.add(przeksztalc2D(odcinek));
+    	
+    	while (linie.odcinki.remove(null));
+    	
+    	return linie.odcinki;
     }
+    
+    public ArrayList<Plaszczyzna> dajPlaszczyzny2D() {
+    	
+    	Plaszczyzny ksztalty = new Plaszczyzny();
+    	    	
+    	for (Plaszczyzna plaszczyzna : plaszczyzny) 
+    		ksztalty.plaszczyzny.add(przeksztalc2D(plaszczyzna));
+    	
+    	Collections.sort(ksztalty.plaszczyzny);
+    	
+    	return ksztalty.plaszczyzny;
+    }
+    
+
+    private Odcinek przeksztalc2D(Odcinek odcinek) {    	   	
+    	
+		Point[] p = przytnij(
+		    			rzutuj(przeksztalc3D(punkty.get(odcinek.a))),
+		    			rzutuj(przeksztalc3D(punkty.get(odcinek.b)))
+		    		);
+		
+		if (p != null) {
+			odcinek.rzut_a = p[0];
+			odcinek.rzut_b = p[1];
+			return odcinek;
+		} else
+			return null;
+    }    
+    
+    private Plaszczyzna przeksztalc2D(Plaszczyzna pl) {    	   	
+    	
+    	Parametr3D punktPoTransformacjach3D;
+    	Point punktPoTransformacjach2D;
+    	double suma_z = 0;
+    	
+    	pl.reset();
+    	for (Integer i_punktu : pl.plaszczyzna) {
+    		punktPoTransformacjach3D = przeksztalc3D(punkty.get(i_punktu));
+    		suma_z += punktPoTransformacjach3D.z;
+    		punktPoTransformacjach2D = rzutuj(punktPoTransformacjach3D);
+    		pl.rzut.addPoint(punktPoTransformacjach2D.x, punktPoTransformacjach2D.y);
+    	}
+    	pl.z_rzutu = (int) Math.round(suma_z/pl.plaszczyzna.size());
+    	
+    	return pl;
+    }  
     
     public void ustawD(Integer d) {
     	this.D = d;
@@ -144,22 +196,22 @@ public class Algorytmy extends Plaszczyzny{
     	return a;
     }
     
-    private ArrayList<Point> przytnij(Point a, Point b) {
+    private Point[] przytnij(Point a, Point b) {
     	
     	int kod_a, kod_b;
-    	ArrayList<Point> wynik = new ArrayList<Point>();
+    	Point[] wynik = {new Point(), new Point()};
     	
     	while (true) {
 	    	kod_a = zakoduj(a);
 	    	kod_b = zakoduj(b);
 	    	
 	    	if ((kod_a | kod_b) == 0) {
-	    		wynik.add(a);
-	    		wynik.add(b);
+	    		wynik[0] = a;
+	    		wynik[1] = b;
 	    		return wynik;
 	    	}
 	    	if ((kod_a & kod_b) != 0)
-	    		return wynik;
+	    		return null;
 	    	
 	    	if (kod_a == 0) {
 	    		kod_a = kod_b;
@@ -170,13 +222,5 @@ public class Algorytmy extends Plaszczyzny{
 	    	}
 	    	a = przytnijOdcinek(a, b, kod_a);
     	}
-    }    
-    
-    private ArrayList<Point> przeksztalc2D(Odcinek odcinek) {    	   	
-    	
-    	return przytnij(
-    			   rzutuj(przeksztalc3D(punkty.get(odcinek.a))),
-    			   rzutuj(przeksztalc3D(punkty.get(odcinek.b)))
-    		   );
-    }    
+    }          
 }

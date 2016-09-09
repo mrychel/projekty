@@ -4,5 +4,5 @@ import java.util.ArrayList;
 
 public class Odcinki extends Punkty3D {
 
-	protected ArrayList<Odcinek> odcinki = new ArrayList<Odcinek>();	
+	public ArrayList<Odcinek> odcinki = new ArrayList<Odcinek>();	
 }

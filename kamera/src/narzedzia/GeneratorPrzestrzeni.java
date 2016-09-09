@@ -1,10 +1,13 @@
 package narzedzia;
 
+import java.awt.Color;
+import java.util.Random;
+
 import algorytmy.Algorytmy;
 
 public class GeneratorPrzestrzeni {
 			
-	public GeneratorPrzestrzeni(Algorytmy m) {		
+	public GeneratorPrzestrzeni(Algorytmy m) {
 		dajPrzestrzen(m, new Punkt3D(0, 0, 0), new Punkt3D(20, 20, 20));		
 		dajPrzestrzen(m, new Punkt3D(980, 0, 0), new Punkt3D(20, 20, 20));
 		dajPrzestrzen(m, new Punkt3D(980, 0, 980), new Punkt3D(20, 20, 20));
@@ -20,26 +23,52 @@ public class GeneratorPrzestrzeni {
 	
 	public void dajPrzestrzen(Algorytmy pl, Punkt3D poczatek, Punkt3D wymiar) {
 		
-		for (int i = 0; i<8; i++) {			
+		// Obie ponizsze tablice stalych zawieraja schematy numerow wierzcholkow
+		// dla odcinkow i plaszczyzn.
+		// Pozwala to w bardzo latwy sposob przejsc z ksztaltu szescianow
+		// do dowolnych ukladow odcinkow lub bryl geometrycznych.
+		// Reszta programu nie ogranicza mozliwosci wyboru wierzcholkow.
+		
+		final int[][] SCHEMAT_KONTUROW_SZESCIAN = {
+			{1, 2}, {2, 4}, {3, 4}, {3, 1},
+			{5, 6}, {6, 8}, {7, 8}, {7, 5},
+			{1, 5}, {2, 6}, {3, 7}, {4, 8}
+		};
+		
+		final int[][] SCHEMAT_POWIERZCHNI_SZESCIAN = {
+			{1, 2, 4, 3}, // przod
+			{1, 2, 6, 5}, // spod
+			{4, 3, 7, 8}, // gora
+			{2, 4, 8, 6}, // prawy bok
+			{1, 3, 7, 5}, // lewy bok
+			{5, 6, 8, 7}  // tyl
+		};
+		
+		Random rand = new Random();
+		Color kolor_konturu = new Color(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255));
+		Color kolor_wypelnienia = new Color(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255));
+		
+		for (int i = 0; i < 8; i++) {			
 			pl.punkty.add(new Punkt3D(poczatek.x+( (i&1)==0 ? wymiar.x : 0),
-										  poczatek.y+( (i&2)==0 ? wymiar.y : 0),
-										  poczatek.z+( (i&4)==0 ? wymiar.z : 0)));
+									  poczatek.y+( (i&2)==0 ? wymiar.y : 0),
+									  poczatek.z+( (i&4)==0 ? wymiar.z : 0)));
 		}
+		
 		int m = pl.punkty.size();
 		
-		pl.odcinki.add(new Odcinek(m-1, m-2));
-		pl.odcinki.add(new Odcinek(m-2, m-4));
-		pl.odcinki.add(new Odcinek(m-3, m-4));
-		pl.odcinki.add(new Odcinek(m-3, m-1));
+		for (int k = 0; k < SCHEMAT_KONTUROW_SZESCIAN.length; k++) {
+			Odcinek o = new Odcinek(m-SCHEMAT_KONTUROW_SZESCIAN[k][0], m-SCHEMAT_KONTUROW_SZESCIAN[k][1]);
+			o.kolor_konturu = Color.RED;
+			pl.odcinki.add(o);
+		}
 		
-		pl.odcinki.add(new Odcinek(m-5, m-6));
-		pl.odcinki.add(new Odcinek(m-6, m-8));
-		pl.odcinki.add(new Odcinek(m-7, m-8));
-		pl.odcinki.add(new Odcinek(m-7, m-5));
-		
-		pl.odcinki.add(new Odcinek(m-1, m-5));
-		pl.odcinki.add(new Odcinek(m-2, m-6));
-		pl.odcinki.add(new Odcinek(m-3, m-7));
-		pl.odcinki.add(new Odcinek(m-4, m-8));
+		for (int k = 0; k < SCHEMAT_POWIERZCHNI_SZESCIAN.length; k++) {
+			Plaszczyzna p = new Plaszczyzna();			
+			p.kolor_konturu = kolor_konturu;
+			p.kolor_wypelnienia = kolor_wypelnienia;
+			for (int w = 0; w < SCHEMAT_POWIERZCHNI_SZESCIAN[k].length; w++)
+				p.plaszczyzna.add(m-SCHEMAT_POWIERZCHNI_SZESCIAN[k][w]);
+			pl.plaszczyzny.add(p);
+		};		
 	}	
 }
