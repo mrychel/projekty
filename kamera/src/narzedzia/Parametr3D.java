@@ -32,13 +32,13 @@ public class Parametr3D {
 	
 	public void przeliczFunkcjeTryg() {
 		if (czyPrzeliczacFunkcjeTryg) {
-			double sinx = Math.sin(x);
-			double siny = Math.sin(y);
-			double sinz = Math.sin(z);
+			double sinx = Math.sin(Math.toRadians(x));
+			double siny = Math.sin(Math.toRadians(y));
+			double sinz = Math.sin(Math.toRadians(z));
 			
-			double cosx = Math.cos(x);
-			double cosy = Math.cos(y);
-			double cosz = Math.cos(z);
+			double cosx = Math.cos(Math.toRadians(x));
+			double cosy = Math.cos(Math.toRadians(y));
+			double cosz = Math.cos(Math.toRadians(z));
 						
 			mo[0][0] = cosy*cosz; 
 			mo[1][0] = (-cosx)*sinz-sinx*siny*cosz;
@@ -58,4 +58,9 @@ public class Parametr3D {
 		this.czyPrzeliczacFunkcjeTryg = czyPrzeliczacFunkcjeTryg;
 		przeliczFunkcjeTryg();
 	}
+	
+	public boolean czyPrzeliczacFunkcjeTryg() {
+		return czyPrzeliczacFunkcjeTryg;
+	}
+	
 }

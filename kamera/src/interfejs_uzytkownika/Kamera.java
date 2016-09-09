@@ -21,6 +21,12 @@ import narzedzia.Parametr3D;
 //http://homepages.inf.ed.ac.uk/rbf/CVonline/LOCAL_COPIES/AV0405/REDSTONE/AxisAngleRotation.html
 
 //https://en.wikipedia.org/wiki/Rotation_formalisms_in_three_dimensions
+
+// DIVIDE BY ZERO przy przycinaniu, bo jak a.x=b.x (poziome i pionowe)
+// i to takie dziwne co siê pojawia byle gdzie (zbieg linii na œrodek ekranu)
+// OPIS ZROBIÆ W PRACY
+// ZDEBUGOWAÆ NA WARTOSCI MNIEJSZE OD ZERA
+// punkt zbiegu perspektywy
 public class Kamera extends JFrame {
 	
     private Matryca matryca = new Matryca();
@@ -48,7 +54,7 @@ public class Kamera extends JFrame {
         tools.add(new Przycisk3D(matryca.dajR()));
         tools.add(new Przycisk3D(matryca.dajS()));
         tools.add(new Przycisk3D(matryca.dajH()));
-        tools.add(new Przycisk("Ogniskowa", matryca.dajD()));
+        tools.add(new Przycisk("d:", matryca.dajD()));
                        
         JFrame f = new JFrame("Kamera");
         f.add(tools, BorderLayout.EAST);
@@ -103,12 +109,12 @@ public class Kamera extends JFrame {
 	    	setLayout(new FlowLayout(FlowLayout.TRAILING));
 	    	
 	        JLabel label = new JLabel(nazwa, JLabel.TRAILING);
-	        JSpinner js = new JSpinner(new SpinnerNumberModel(10, 0, 100, 1d));
-	        js.setEditor(new JSpinner.NumberEditor(js, "000"));
+	        JSpinner js = new JSpinner(new SpinnerNumberModel(-500, -1000, 1000, 1d));
+	        js.setEditor(new JSpinner.NumberEditor(js, "000"));	        	        
 	        js.addChangeListener(new ChangeListener() {
 				
 				@Override
-				public void stateChanged(ChangeEvent e) {
+				public void stateChanged(ChangeEvent e) {					
 					matryca.ustawD(((Double)((JSpinner) e.getSource()).getValue()).intValue());
 					obiektyw.repaint();
 				}
@@ -144,7 +150,18 @@ public class Kamera extends JFrame {
 				
 				@Override
 				public void stateChanged(ChangeEvent e) {
-					parametr.x = ((Double)((JSpinner) e.getSource()).getValue()).floatValue();
+					
+					parametr.x = (Double)((JSpinner) e.getSource()).getValue();
+					
+					if (parametr.czyPrzeliczacFunkcjeTryg() && parametr.x == 361) {
+						((JSpinner) e.getSource()).setValue(0.0);
+						parametr.x = 0.0;
+					}
+					if (parametr.czyPrzeliczacFunkcjeTryg() && parametr.x == -1) {
+						((JSpinner) e.getSource()).setValue(360.0);
+						parametr.x = 360.0;
+					}
+					
 					parametr.przeliczFunkcjeTryg();
 					obiektyw.repaint();
 				}
@@ -160,7 +177,18 @@ public class Kamera extends JFrame {
 				
 				@Override
 				public void stateChanged(ChangeEvent e) {
-					parametr.y = ((Double)((JSpinner) e.getSource()).getValue()).floatValue();
+					
+					parametr.y = (Double)((JSpinner) e.getSource()).getValue();
+					
+					if (parametr.czyPrzeliczacFunkcjeTryg() && parametr.y == 361) {
+						((JSpinner) e.getSource()).setValue(0.0);
+						parametr.y = 0.0;
+					}
+					if (parametr.czyPrzeliczacFunkcjeTryg() && parametr.y == -1) {
+						((JSpinner) e.getSource()).setValue(360.0);
+						parametr.y = 360.0;
+					}
+					
 					parametr.przeliczFunkcjeTryg();
 					obiektyw.repaint();
 				}
@@ -177,6 +205,16 @@ public class Kamera extends JFrame {
 				@Override
 				public void stateChanged(ChangeEvent e) {
 					parametr.z = ((Double)((JSpinner) e.getSource()).getValue()).floatValue();
+					
+					if (parametr.czyPrzeliczacFunkcjeTryg() && parametr.z == 361) {
+						((JSpinner) e.getSource()).setValue(0.0);
+						parametr.z = 0.0;
+					}
+					if (parametr.czyPrzeliczacFunkcjeTryg() && parametr.z == -1) {
+						((JSpinner) e.getSource()).setValue(360.0);
+						parametr.z = 360.0;
+					}
+					
 					parametr.przeliczFunkcjeTryg();
 					obiektyw.repaint();
 				}

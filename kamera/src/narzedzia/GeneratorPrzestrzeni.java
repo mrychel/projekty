@@ -5,10 +5,17 @@ import interfejs_uzytkownika.Matryca;
 public class GeneratorPrzestrzeni {
 			
 	public GeneratorPrzestrzeni(Matryca m) {		
-		dajPrzestrzen(m, new Punkt3D(500, 500, 60), new Punkt3D(250, 350, 460));
-		dajPrzestrzen(m, new Punkt3D(40, 30, 20), new Punkt3D(500, 10, 10));
-		dajPrzestrzen(m, new Punkt3D(-100, -100, -20), new Punkt3D(100, 100, 100));
-		//dajPrzestrzen(m, new Punkt3D(-500, -500, -500), new Punkt3D(500, 500, 500));
+		dajPrzestrzen(m, new Punkt3D(0, 0, 0), new Punkt3D(20, 20, 20));		
+		dajPrzestrzen(m, new Punkt3D(980, 0, 0), new Punkt3D(20, 20, 20));
+		dajPrzestrzen(m, new Punkt3D(980, 0, 980), new Punkt3D(20, 20, 20));
+		dajPrzestrzen(m, new Punkt3D(0, 0, 980), new Punkt3D(20, 20, 20));
+		
+		dajPrzestrzen(m, new Punkt3D(0, 0, 40), new Punkt3D(20, 20, 20));		
+		dajPrzestrzen(m, new Punkt3D(40, 0, 0), new Punkt3D(250, 10, 10));
+		
+		dajPrzestrzen(m, new Punkt3D(500, 0, 260), new Punkt3D(250, 350, 440));
+		dajPrzestrzen(m, new Punkt3D(500, 0, 20), new Punkt3D(100, 100, 100));
+		dajPrzestrzen(m, new Punkt3D(500, 0, 750), new Punkt3D(450, 500, 250));
 	}
 	
 	public void dajPrzestrzen(Matryca pl, Punkt3D poczatek, Punkt3D wymiar) {

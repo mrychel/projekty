@@ -1,7 +1,6 @@
 package interfejs_uzytkownika;
 
 import java.awt.Point;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import narzedzia.GeneratorPrzestrzeni;
@@ -23,13 +22,21 @@ public class Matryca extends Plaszczyzny{
     
     public Matryca() {   
     	new GeneratorPrzestrzeni(this);
+    	
         H = new Parametr3D("Pochylenie");
+        H.ustawWartosci(0, -3.0, 3.0, 0.1);
+        
         S = new Parametr3D("Powiêkszenie");
         S.ustawWartosci(1, 0.1, 5.0, 0.1);
+        
         R = new Parametr3D("Obrót");
+        R.ustawWartosci(0, -1, 361, 1d);
         R.ustawPrzeliczanieFunkcjiTryg(true);
+        
         T = new Parametr3D("Przesuniêcie");
-        D = new Integer(10);
+        T.ustawWartosci(50, -1500, 1500, 10d);
+        
+        D = new Integer(-500);
         przytnijOdcinek(null, null, 0);
     }
 
@@ -77,18 +84,18 @@ public class Matryca extends Plaszczyzny{
     	
     	Parametr3D p = new Parametr3D("");
     	
-    	double x = punkt3D.x, 
-     		   y = punkt3D.y, 
-     		   z = punkt3D.z;
+    	double x = punkt3D.x,
+     		   y = -punkt3D.y, 
+     		   z = -punkt3D.z;
      	  	
      	x = x*R.mo[0][0]+y*R.mo[0][1]+z*R.mo[0][2];
      	y = x*R.mo[1][0]+y*R.mo[1][1]+z*R.mo[1][2];
      	z = x*R.mo[2][0]+y*R.mo[2][1]+z*R.mo[2][2];
      	
-     	p.x = x * S.x + T.x;
-     	p.y = y * S.y + T.y;
-     	p.z = z * S.z + T.z;
-    	 
+     	p.x = x * S.x + H.y*y + H.z*z - T.x;
+     	p.y = y * S.y + H.x*x + H.z*z + T.y;
+     	p.z = z * S.z + H.x*x + H.y*y + T.z;
+    	
      	return p;
     }
     
@@ -116,7 +123,12 @@ public class Matryca extends Plaszczyzny{
     	int[] bity = {BIT_3, BIT_2, BIT_1, BIT_0};
     	
     	for (int bit : bity)
-    	    if ((kod | bit) == 0) 
+    	    if ((kod & bit) != 0) {
+    	    	/*
+    	    	System.out.println("----------");
+    	    	System.out.println(a.x+" "+a.y);
+    	    	System.out.println(b.x+" "+b.y);
+    	    */
     	    	switch (bit) {
     	    		case BIT_3 :
     	    			a.x = a.x+(a.x-b.x)*(a.y-POCZATEK_OBSZARU_RYSOWANIA_Y-OBSZAR_RYSOWANIA_Y+1)/(b.y-a.y);
@@ -136,7 +148,7 @@ public class Matryca extends Plaszczyzny{
     	    			return a;
 	    			default:
 	    				return a;
-    	    	}
+    	    	}}
     	return a;
     }
     
@@ -166,19 +178,13 @@ public class Matryca extends Plaszczyzny{
 	    	}
 	    	a = przytnijOdcinek(a, b, kod_a);
     	}
-    }
-    
+    }    
     
     private ArrayList<Point> przeksztalc2D(Odcinek odcinek) {    	   	
     	
-    	ArrayList<Point> o = new ArrayList<>();
-    	o.add(rzutuj(przeksztalc3D(punkty.get(odcinek.a))));
-    	o.add(rzutuj(przeksztalc3D(punkty.get(odcinek.b))));
-    	return o;
-    	/*
     	return przytnij(
     			   rzutuj(przeksztalc3D(punkty.get(odcinek.a))),
     			   rzutuj(przeksztalc3D(punkty.get(odcinek.b)))
-    		   );*/    	
+    		   );
     }    
 }
