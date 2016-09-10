@@ -14,27 +14,6 @@ import narzedzia.Odcinek;
 import narzedzia.Parametr3D;
 import narzedzia.Plaszczyzna;
 
-
-//http://mst.mimuw.edu.pl/lecture.php?lecture=gk1&part=Ch3
-//http://eduinf.waw.pl/inf/utils/002_roz/2008_07.php
-//http://www.asawicki.info/productions/artykuly/Zaawansowana_kamera_3D.php5
-// przerobica Matryce na Algorytmy i tam wydzielic algorytmy.
-// potem przerobiæ ¿eby zwracal liste parametrow 3d i 2d oraz liste odcinkow/scian
-// w instrukcji opisac te listy oraz dziedziczenie narzedzi.
-//https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
-//http://homepages.inf.ed.ac.uk/rbf/CVonline/LOCAL_COPIES/AV0405/REDSTONE/AxisAngleRotation.html
-
-//https://en.wikipedia.org/wiki/Rotation_formalisms_in_three_dimensions
-
-// OPIS ZROBIÆ W PRACY
-// ZDEBUGOWAÆ NA WARTOSCI MNIEJSZE OD ZERA
-// b³¹d przy obracaniu, b³¹d przy wchodzeniu do wnêtrza figury.
-//i to takie dziwne co siê pojawia byle gdzie (zbieg linii na œrodek ekranu)
-
-
-//https://en.wikipedia.org/wiki/3D_projection
-//http://www.procto.biz/software-technology/courseware-for-hidden-linesurface-removal
-//http://www.mat.uniroma2.it/~picard/SMC/didattica/materiali_did/Java/Java_3D/Java_3D_Programming.pdf
 public class Kamera extends JFrame {
 	
     private Algorytmy algorytmy = new Algorytmy();
@@ -109,8 +88,8 @@ public class Kamera extends JFrame {
 
     	public Obiektyw() {
     		super();
-    		setMinimumSize(new Dimension(algorytmy.OBSZAR_RYSOWANIA_X, algorytmy.OBSZAR_RYSOWANIA_Y));
-    		setPreferredSize(new Dimension(algorytmy.OBSZAR_RYSOWANIA_X, algorytmy.OBSZAR_RYSOWANIA_Y));    		
+    		setMinimumSize(new Dimension(Algorytmy.OBSZAR_RYSOWANIA_X, Algorytmy.OBSZAR_RYSOWANIA_Y));
+    		setPreferredSize(new Dimension(Algorytmy.OBSZAR_RYSOWANIA_X, Algorytmy.OBSZAR_RYSOWANIA_Y));    		
     	}
     	
 	    private void przerysuj(Graphics g) {
